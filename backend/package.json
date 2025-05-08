@@ -18,12 +18,12 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/CainaZumaa/controle-users.git"
+    "url": "git+https://github.com/CainaZumaa/backend.git"
   },
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/CainaZumaa/controle-users/issues"
+    "url": "https://github.com/CainaZumaa/backend/issues"
   },
-  "homepage": "https://github.com/CainaZumaa/controle-users#readme"
+  "homepage": "https://github.com/CainaZumaa/backend#readme"
 }
