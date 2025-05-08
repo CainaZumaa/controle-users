@@ -1,0 +1,29 @@
+{
+  "dependencies": {
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0",
+    "knex": "^3.1.0",
+    "nodemon": "^3.1.10",
+    "pg": "^8.15.6",
+    "postgres": "^3.4.5"
+  },
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "backend - projeto de gerenciamento de usuario",
+  "main": "index.js",
+  "type": "module",
+  "devDependencies": {},
+  "scripts": {
+    "dev": "nodemon index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/CainaZumaa/controle-users.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/CainaZumaa/controle-users/issues"
+  },
+  "homepage": "https://github.com/CainaZumaa/controle-users#readme"
+}
