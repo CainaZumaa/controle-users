@@ -12,7 +12,9 @@
   "description": "backend - projeto de gerenciamento de usuario",
   "main": "index.js",
   "type": "module",
-  "devDependencies": {},
+  "devDependencies": {
+    "@types/node": "^22.15.17"
+  },
   "scripts": {
     "dev": "nodemon index.js"
   },
