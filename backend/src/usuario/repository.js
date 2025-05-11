@@ -1,25 +1,82 @@
-import db from "../../db";
+import db from "../../db.js";
 
-const tabela = "Usuarios";
+const tabela = "usuarios";
 
 export const create = async (dados) => {
-  await db(tabela).insert({});
+  const dadosMapeados = {
+    nome: dados.nome,
+    email: dados.email,
+  };
+  const result = await db(tabela).insert(dadosMapeados).returning("*");
+
+  return result;
 };
 
 export const findAll = async () => {
-  return await db(tabela).select("*");
+  const usuarios = await db(tabela).select("*");
+
+  return usuarios.map((usuario) => ({
+    id: usuario.id,
+    nome: usuario.nome,
+    email: usuario.email,
+  }));
 };
 
 export const findOne = async (id) => {
-  return await db(tabela).where({ id: id }).first();
+  const usuario = await db(tabela).where({ id }).first();
+
+  if (usuario) {
+    return {
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+    };
+  }
+  return null;
 };
 
 export const update = async (id, dados) => {
-  await db(tabela).where({ id: id }).update({});
+  const dadosMapeados = {
+    nome: dados.nome,
+    email: dados.email,
+  };
+
+  const result = await db(tabela)
+    .where({ id })
+    .update(dadosMapeados)
+    .returning("*");
+
+  if (!result || result.length === 0) {
+    throw new Error("Nenhum registro foi atualizado.");
+  }
+  return result[0];
+};
+
+// patch
+export const patch = async (id, dados) => {
+  const dadosMapeados = {
+    nome: dados.nome,
+    email: dados.email,
+  };
+
+  const result = await db(tabela)
+    .where({ id })
+    .update(dadosMapeados)
+    .returning("*");
+
+  if (!result || result.length === 0) {
+    throw new Error("Nenhum registro foi atualizado.");
+  }
+  return result[0];
 };
 
 export const remove = async (id) => {
-  await db(tabela).where({ id: id }).delete();
+  const result = await db(tabela).where({ id }).delete().returning("*");
+
+  if (!result || result.length === 0) {
+    throw new Error("Nenhum registro foi removido.");
+  }
+  return result[0];
 };
 
 export const repository_usuarios = {
