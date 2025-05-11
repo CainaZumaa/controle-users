@@ -24,7 +24,6 @@ export const usuariosService = {
     await repository_usuarios.update(id, dados);
   },
 
-  // patch
   async patch(id, dados) {
     Usuario.validate(dados);
     const usuarioExistente = await repository_usuarios.findOne(id);
