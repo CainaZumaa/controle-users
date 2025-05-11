@@ -52,7 +52,6 @@ export const update = async (id, dados) => {
   return result[0];
 };
 
-// patch
 export const patch = async (id, dados) => {
   const dadosMapeados = {
     nome: dados.nome,

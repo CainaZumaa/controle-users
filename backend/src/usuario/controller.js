@@ -47,7 +47,6 @@ export const updateUsuario = async (req, res) => {
   }
 };
 
-// patch
 export const patchUsuario = async (req, res) => {
   try {
     const { id } = req.params;
