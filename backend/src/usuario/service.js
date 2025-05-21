@@ -57,7 +57,8 @@ export const usuariosService = {
     const usuario = await repository_usuarios.findByEmail(email);
     if (!usuario) throw new Error("Usuário não encontrado");
 
-    const senhaValida = await compare(senha, usuario.senha);
+    const senhaValida = await bcrypt.compare(senha, usuario.senha);
+
     if (!senhaValida) throw new Error("Senha inválida");
 
     return {

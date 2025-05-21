@@ -5,11 +5,11 @@ exports.seed = async function (knex) {
 
   // Gera hashes para as senhas
   const senhas = await Promise.all([
-    bcrypt.hash("123", 10),
-    bcrypt.hash("456", 10),
-    bcrypt.hash("789", 10),
-    bcrypt.hash("abc", 10),
-    bcrypt.hash("def", 10),
+    bcrypt.hash("123", 8),
+    bcrypt.hash("456", 8),
+    bcrypt.hash("789", 8),
+    bcrypt.hash("abc", 8),
+    bcrypt.hash("def", 8),
   ]);
 
   await knex("usuarios").insert([
