@@ -26,8 +26,15 @@ export const getUsuario = async (req, res) => {
 
 export const createUsuario = async (req, res) => {
   try {
-    const dados = req.body;
-    await usuariosService.create(dados);
+    const { nome, email, senha } = req.body;
+
+    if (!nome || !email || !senha) {
+      return res
+        .status(400)
+        .json({ error: "Nome, email e senha são obrigatórios" });
+    }
+
+    await usuariosService.create({ nome, email, senha });
     res.status(201).json({ message: "Usuário criado com sucesso" });
   } catch (error) {
     res.status(500).json({ error: "Erro ao criar usuário: " + error.message });

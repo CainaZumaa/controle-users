@@ -1,4 +1,6 @@
 import express from "express";
+import { register, login } from "./authController.js";
+import { authMiddleware } from "../middlewares/auth.js";
 import {
   getAllUsuarios,
   getUsuario,
@@ -10,11 +12,16 @@ import {
 
 const router = express.Router();
 
-router.get("/usuarios", getAllUsuarios);
-router.get("/usuarios/:id", getUsuario);
+// Rotas Públicas
+router.post("/register", register);
+router.post("/login", login);
 router.post("/usuarios", createUsuario);
-router.put("/usuarios/:id", updateUsuario);
-router.patch("/usuarios/:id", patchUsuario);
-router.delete("/usuarios/:id", deleteUsuario);
+
+// Rotas Privadas (protegidas)
+router.get("/usuarios/:id", authMiddleware, getUsuario);
+router.get("/usuarios", authMiddleware, getAllUsuarios);
+router.put("/usuarios/:id", authMiddleware, updateUsuario);
+router.patch("/usuarios/:id", authMiddleware, patchUsuario);
+router.delete("/usuarios/:id", authMiddleware, deleteUsuario);
 
 export default router;

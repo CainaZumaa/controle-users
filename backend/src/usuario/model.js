@@ -7,7 +7,7 @@ export class Usuario {
   }
 
   static validate(dados) {
-    if (!dados.nome || !dados.email) {
+    if (!dados.nome || !dados.email || !dados.senha) {
       throw new Error("Nome, email e senha são obrigatórios");
     }
   }

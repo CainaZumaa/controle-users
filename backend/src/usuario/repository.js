@@ -6,6 +6,7 @@ export const create = async (dados) => {
   const dadosMapeados = {
     nome: dados.nome,
     email: dados.email,
+    senha: dados.senha,
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 
@@ -26,19 +27,21 @@ export const findOne = async (id) => {
   const usuario = await db(tabela).where({ id }).first();
 
   if (usuario) {
-    return {
-      id: usuario.id,
-      nome: usuario.nome,
-      email: usuario.email,
-    };
+    return usuario;
   }
   return null;
+};
+
+export const findByEmail = async (email) => {
+  const usuario = await db(tabela).where({ email }).first();
+  return usuario;
 };
 
 export const update = async (id, dados) => {
   const dadosMapeados = {
     nome: dados.nome,
     email: dados.email,
+    senha: dados.senha,
   };
 
   const result = await db(tabela)
@@ -82,6 +85,7 @@ export const repository_usuarios = {
   create,
   findAll,
   findOne,
+  findByEmail,
   update,
   remove,
 };
