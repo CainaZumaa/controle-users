@@ -81,6 +81,26 @@ export const remove = async (id) => {
   return result[0];
 };
 
+export const updateLastLogin = async (userId) => {
+  return await db(tabela).where({ id: userId }).update({
+    last_login: new Date(),
+  });
+};
+
+// regra de negócio
+export const blockInactiveUsers = async () => {
+  const thirtyDaysAgo = new Date();
+  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+  return await db(tabela)
+    .where("is_active", true)
+    .where("last_login", "<", thirtyDaysAgo)
+    .orWhereNull("last_login")
+    .update({
+      is_active: false,
+    });
+};
+
 export const repository_usuarios = {
   create,
   findAll,

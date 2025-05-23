@@ -75,4 +75,15 @@ export const usuariosService = {
       email: usuario.email,
     };
   },
+
+  async checkAndUpdateLogin(userId) {
+    const user = await repository_usuarios.findOne(userId);
+    if (!user.is_active) {
+      throw new Error("Conta inativa. Entre em contato com o suporte.");
+    }
+
+    await repository_usuarios.updateLastLogin(userId);
+
+    await repository_usuarios.blockInactiveUsers();
+  },
 };
