@@ -108,4 +108,5 @@ export const repository_usuarios = {
   findByEmail,
   update,
   remove,
+  updateLastLogin,
 };

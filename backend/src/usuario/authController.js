@@ -11,10 +11,10 @@ export const login = async (req, res) => {
       return res.status(401).json({ error: "Credenciais inválidas" });
     }
 
-    await usuariosService.checkAndUpdateLogin(user.id);
+    await usuariosService.checkAndUpdateLogin(usuario.id);
 
     const token = jwt.sign(
-      { id: usuario.id, email: usuario.email },
+      { id: usuario.id, email: usuario.email, is_active: usuario.is_active },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
@@ -24,6 +24,6 @@ export const login = async (req, res) => {
     if (error.message.includes("inativa")) {
       return res.status(403).json({ error: error.message });
     }
-    res.status(500).json({ error: "Erro ao fazer login" });
+    res.status(500).json({ error: "Erro ao fazer login: " + error.message });
   }
 };
