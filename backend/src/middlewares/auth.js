@@ -9,7 +9,6 @@ export const authMiddleware = async (req, res, next) => {
   }
 
   const token = authHeader.split(" ")[1];
-  console.log("Token JWT:", token);
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);

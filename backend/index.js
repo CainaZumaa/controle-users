@@ -1,5 +1,7 @@
 import express from "express";
 import router from "../backend/src/usuario/route.js";
+// @ts-ignore
+import nodemailer from "nodemailer";
 
 const app = express();
 const port = 3000;

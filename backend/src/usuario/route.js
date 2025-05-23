@@ -1,6 +1,7 @@
 import express from "express";
 import { register, login } from "./authController.js";
 import { authMiddleware } from "../middlewares/auth.js";
+import { magicAuthController } from "../magicAuth/controller.js";
 import {
   getAllUsuarios,
   getUsuario,
@@ -11,6 +12,9 @@ import {
 } from "./controller.js";
 
 const router = express.Router();
+
+// Magic Link Routes
+router.post("/auth/magic", magicAuthController.requestMagicLink);
 
 // Rotas Públicas
 router.post("/register", register);

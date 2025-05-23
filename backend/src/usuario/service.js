@@ -8,9 +8,6 @@ const passwordHash = async (password) => {
   return await bcrypt.hash(password, salt);
 };
 
-console.log(passwordHash);
-console.log("Bcrypt importado:", typeof bcrypt.hash);
-
 export const usuariosService = {
   async create(dados) {
     Usuario.validate(dados);
@@ -61,6 +58,17 @@ export const usuariosService = {
 
     if (!senhaValida) throw new Error("Senha inválida");
 
+    return {
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+    };
+  },
+
+  // magicAuth
+  async findByEmail(email) {
+    const usuario = await repository_usuarios.findByEmail(email);
+    if (!usuario) return null;
     return {
       id: usuario.id,
       nome: usuario.nome,
