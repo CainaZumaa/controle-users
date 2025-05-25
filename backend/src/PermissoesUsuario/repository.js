@@ -1,8 +1,6 @@
 import db from "../../db.js";
 
 const tabela = "permissoesUsuario";
-const tabelaPermissao = "permissoes";
-const tabelaUsuarios = "usuarios";
 
 export const create = async (dados) => {
   const dadosMapeados = {
@@ -15,32 +13,24 @@ export const create = async (dados) => {
 };
 
 export const findAll = async () => {
-  const modulos = await db("permissoesUsuario")
-    .join("permissoes", "permissoesUsuario.id_permissao", "permissoes.id")
-    .join("usuarios","permissoesUsuario.id_usuario","usuarios.id")
-    .select("*");
+  const modulos = await db(tabela).select("*");
 
-    if (!modulos) {
-      return null;
-         
-    };
-
-  return modulos
+  return modulos.map((modulos) => ({
+    id_usuario: modulos.id_usuario,
+    id_permissao: modulos.id_permissao 
+  }));
 };
 
 export const findOne = async (id) => {
-  const modulos = await db("permissoesUsuario")
-    .join("permissoes", "permissoesUsuario.id_permissao", "permissoes.id")
-    .join("usuarios","permissoesUsuario.id_usuario","usuarios.id")
-    .where("usuarios.id", id)
-    .select("*");
+  const modulos = await db(tabela).where({ id }).first();
 
-    if (!modulos) {
-      return null;
-         
+  if (modulos) {
+    return {
+        id_usuario: modulos.id_usuario,
+        id_permissao: modulos.id_permissao 
     };
-
-  return modulos
+  }
+  return null;
 };
 
 export const update = async (id, dados) => {
@@ -50,7 +40,7 @@ export const update = async (id, dados) => {
 };
 
   const result = await db(tabela)
-    .where({ id_permissao: id  })
+    .where({ id })
     .update(dadosMapeados)
     .returning("*");
 
@@ -67,7 +57,7 @@ export const patch = async (id, dados) => {
   };
 
   const result = await db(tabela)
-    .where({id_permissao: id })
+    .where({ id })
     .update(dadosMapeados)
     .returning("*");
 
@@ -78,7 +68,7 @@ export const patch = async (id, dados) => {
 };
 
 export const remove = async (id) => {
-  const result = await db(tabela).where({ id: id  }).delete().returning("*");
+  const result = await db(tabela).where({ id }).delete().returning("*");
 
   if (!result || result.length === 0) {
     throw new Error("Nenhum registro foi removido.");
@@ -86,11 +76,27 @@ export const remove = async (id) => {
   return result[0];
 };
 
+export const findPermissoesDoUsuario = async (id_usuario) => {
+  return await db("permissoesUsuario as pu")
+    .join("permissoes as p", "pu.id_permissao", "p.id")
+    .where("pu.id_usuario", id_usuario)
+    .select(
+      "p.id",
+      "p.nome",
+      "p.descricao",
+      "p.inserir",
+      "p.editar",
+      "p.deletar",
+      "p.ler"
+    );
+};
+
 export const repository_permissoesUsuario = {
   create,
   findAll,
   findOne,
   update,
-  patch,
   remove,
+  findPermissoesDoUsuario
+
 };
