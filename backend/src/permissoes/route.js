@@ -10,11 +10,11 @@ import {
 
 const router = express.Router();
 
-router.get("/usuarios", getAllPermissoes);
-router.get("/usuarios/:id", getPermissao);
-router.post("/usuarios", createPermissoes);
-router.put("/usuarios/:id", updatePermissoes);
-router.patch("/usuarios/:id", patchPermissoes);
-router.delete("/usuarios/:id", deletePermissoes);
+router.get("/permissao", getAllPermissoes);
+router.get("/permissao/:id", getPermissao);
+router.post("/permissao", createPermissoes);
+router.put("/permissao/:id", updatePermissoes);
+router.patch("/permissao/:id", patchPermissoes);
+router.delete("/permissao/:id", deletePermissoes);
 
 export default router;
