@@ -1,12 +1,11 @@
 import db from "../../db.js";
 
-const tabela = "usuarios";
+const tabela = "permissoesUsuario";
 
 export const create = async (dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    email: dados.email,
-    senha: dados.senha,
+    id_usuario: dados.id_usuario,
+    id_permissao: dados.id_permissao    
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 
@@ -14,35 +13,31 @@ export const create = async (dados) => {
 };
 
 export const findAll = async () => {
-  const usuarios = await db(tabela).select("*");
+  const modulos = await db(tabela).select("*");
 
-  return usuarios.map((usuario) => ({
-    id: usuario.id,
-    nome: usuario.nome,
-    email: usuario.email,
+  return modulos.map((modulos) => ({
+    id_usuario: modulos.id_usuario,
+    id_permissao: modulos.id_permissao 
   }));
 };
 
 export const findOne = async (id) => {
-  const usuario = await db(tabela).where({ id }).first();
+  const modulos = await db(tabela).where({ id }).first();
 
-  if (usuario) {
-    return usuario;
+  if (modulos) {
+    return {
+        id_usuario: modulos.id_usuario,
+        id_permissao: modulos.id_permissao 
+    };
   }
   return null;
 };
 
-export const findByEmail = async (email) => {
-  const usuario = await db(tabela).where({ email }).first();
-  return usuario;
-};
-
 export const update = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    email: dados.email,
-    senha: dados.senha,
-  };
+        id_usuario: dados.id_usuario,
+        id_permissao: dados.id_permissao 
+};
 
   const result = await db(tabela)
     .where({ id })
@@ -57,8 +52,8 @@ export const update = async (id, dados) => {
 
 export const patch = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    email: dados.email,
+        id_usuario: dados.id_usuario,
+        id_permissao: dados.id_permissao
   };
 
   const result = await db(tabela)
@@ -81,32 +76,27 @@ export const remove = async (id) => {
   return result[0];
 };
 
-export const updateLastLogin = async (userId) => {
-  return await db(tabela).where({ id: userId }).update({
-    last_login: new Date(),
-  });
+export const findPermissoesDoUsuario = async (id_usuario) => {
+  return await db("permissoesUsuario as pu")
+    .join("permissoes as p", "pu.id_permissao", "p.id")
+    .where("pu.id_usuario", id_usuario)
+    .select(
+      "p.id",
+      "p.nome",
+      "p.descricao",
+      "p.inserir",
+      "p.editar",
+      "p.deletar",
+      "p.ler"
+    );
 };
 
-// regra de negócio
-export const blockInactiveUsers = async () => {
-  const thirtyDaysAgo = new Date();
-  thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
-
-  return await db(tabela)
-    .where("is_active", true)
-    .where("last_login", "<", thirtyDaysAgo)
-    .orWhereNull("last_login")
-    .update({
-      is_active: false,
-    });
-};
-
-export const repository_usuarios = {
+export const repository_permissoesUsuario = {
   create,
   findAll,
   findOne,
-  findByEmail,
   update,
   remove,
-  updateLastLogin,
+  findPermissoesDoUsuario
+
 };
