@@ -1,15 +1,11 @@
 import db from "../../db.js";
 
-const tabela = "permissoes";
+const tabela = "permissoesUsuario";
 
 export const create = async (dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    descricao: dados.descricao,
-    inserir:dados.inserir,
-    editar:dados.editar,
-    deletar: dados.deletar,
-    ler:dados.ler
+    id_usuario: dados.id_usuario,
+    id_permissao: dados.id_permissao    
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 
@@ -20,14 +16,8 @@ export const findAll = async () => {
   const modulos = await db(tabela).select("*");
 
   return modulos.map((modulos) => ({
-    id: modulos.id,
-    nome: modulos.nome,
-    descricao: modulos.descricao,
-    criado_em: modulos.criado_em,
-    inserir:modulos.inserir,
-    editar:modulos.editar,
-    deletar: modulos.deletar,
-    ler:modulos.ler
+    id_usuario: modulos.id_usuario,
+    id_permissao: modulos.id_permissao 
   }));
 };
 
@@ -36,14 +26,8 @@ export const findOne = async (id) => {
 
   if (modulos) {
     return {
-      id: modulos.id,
-      descricao: modulos.descricao,
-      nome: modulos.nome,
-      criado_em: modulos.criado_em,
-      inserir:modulos.inserir,
-      editar:modulos.editar,
-      deletar: modulos.deletar,
-      ler:modulos.ler
+        id_usuario: modulos.id_usuario,
+        id_permissao: modulos.id_permissao 
     };
   }
   return null;
@@ -51,12 +35,8 @@ export const findOne = async (id) => {
 
 export const update = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    descricao: dados.descricao,
-    inserir:dados.inserir,
-    editar:dados.editar,
-    deletar: dados.deletar,
-    ler:dados.ler
+        id_usuario: dados.id_usuario,
+        id_permissao: dados.id_permissao 
 };
 
   const result = await db(tabela)
@@ -72,12 +52,8 @@ export const update = async (id, dados) => {
 
 export const patch = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    descricao: dados.descricao,
-    inserir:dados.inserir,
-    editar:dados.editar,
-    deletar: dados.deletar,
-    ler:dados.ler
+        id_usuario: dados.id_usuario,
+        id_permissao: dados.id_permissao
   };
 
   const result = await db(tabela)
@@ -100,10 +76,27 @@ export const remove = async (id) => {
   return result[0];
 };
 
-export const repository_permissoes = {
+export const findPermissoesDoUsuario = async (id_usuario) => {
+  return await db("permissoesUsuario as pu")
+    .join("permissoes as p", "pu.id_permissao", "p.id")
+    .where("pu.id_usuario", id_usuario)
+    .select(
+      "p.id",
+      "p.nome",
+      "p.descricao",
+      "p.inserir",
+      "p.editar",
+      "p.deletar",
+      "p.ler"
+    );
+};
+
+export const repository_permissoesUsuario = {
   create,
   findAll,
   findOne,
   update,
   remove,
+  findPermissoesDoUsuario
+
 };
