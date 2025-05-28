@@ -2,6 +2,10 @@
 import { usuariosService } from "../usuario/service.js";
 import { sendMagicLinkEmail } from "./emailService.js";
 import { magicAuthService } from "./magicAuthService.js";
+import { testEmailConfiguration, sendWelcomeEmail } from "./emailService.js";
+
+const isValid = await testEmailConfiguration();
+console.log("Email config:", isValid ? "OK" : "ERRO");
 
 export const magicAuthController = {
   async requestMagicLink(req, res) {
@@ -28,7 +32,7 @@ export const magicAuthController = {
         user.id
       );
 
-      await sendMagicLinkEmail(user.email, magicToken);
+      await sendMagicLinkEmail(user.email, magicToken, authToken);
 
       res.json({
         success: true,
