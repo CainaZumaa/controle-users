@@ -1,4 +1,5 @@
 import { usuariosService } from "./service.js";
+import { sendWelcomeEmail } from "../magicAuth/emailService.js";
 
 export const getAllUsuarios = async (_, res) => {
   try {
@@ -34,7 +35,17 @@ export const createUsuario = async (req, res) => {
         .json({ error: "Nome, email e senha são obrigatórios" });
     }
 
-    await usuariosService.create({ nome, email, senha });
+    await usuariosService.create({ nome, email, senha }); // Envia e-mail de boas-vindas
+
+    try {
+      await sendWelcomeEmail(email, nome);
+    } catch (emailError) {
+      console.warn(
+        "Usuário criado, mas falha ao enviar e-mail de boas-vindas:",
+        emailError.message
+      );
+    }
+
     res.status(201).json({ message: "Usuário criado com sucesso" });
   } catch (error) {
     res.status(500).json({ error: "Erro ao criar usuário: " + error.message });

@@ -10,6 +10,7 @@ import {
   patchUsuario,
   deleteUsuario,
 } from "./controller.js";
+import { checkPasswordStrength } from "../passwordCheckController/passwordController.js";
 
 const router = express.Router();
 
@@ -27,5 +28,7 @@ router.get("/usuarios", authMiddleware, getAllUsuarios);
 router.put("/usuarios/:id", authMiddleware, updateUsuario);
 router.patch("/usuarios/:id", authMiddleware, patchUsuario);
 router.delete("/usuarios/:id", authMiddleware, deleteUsuario);
+
+router.use("/", checkPasswordStrength);
 
 export default router;
