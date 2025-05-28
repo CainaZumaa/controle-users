@@ -82,7 +82,7 @@ const generateMagicLinkTemplate = (magicLink, userEmail, magicToken) => `
     <div style="border-top: 1px solid #ecf0f1; padding-top: 20px; margin-top: 30px;">
       <div style="background-color: #f0f0f0; padding: 12px 20px; border-radius: 6px; margin-bottom: 15px;">
         <p style="margin: 0; font-size: 14px; color: #555;">
-          🔑 <strong>Seu token:</strong> ${magicToken}
+          🔑 <strong>Seu token:</strong> (apenas em dev) ${magicToken}
         </p>
       </div>
       <p style="color: #95a5a6; font-size: 13px; text-align: center; margin: 0;">
@@ -95,7 +95,7 @@ const generateMagicLinkTemplate = (magicLink, userEmail, magicToken) => `
   
   <div style="text-align: center; margin-top: 20px;">
     <p style="color: #bdc3c7; font-size: 12px; margin: 0;">
-      © 2024 Controle Users - Sistema de Gerenciamento de Usuários
+      © 2025 Controle Users - Sistema de Gerenciamento de Usuários
     </p>
   </div>
   
@@ -152,7 +152,7 @@ export const sendWelcomeEmail = async (email, userName) => {
 
         <div style="text-align: center; margin-top: 40px;">
           <p style="color: #bdc3c7; font-size: 12px; margin: 0;">
-            © 2024 Controle Users - Sistema de Gerenciamento de Usuários
+            © 2025 Controle Users - Sistema de Gerenciamento de Usuários
           </p>
         </div>
       </div>
