@@ -28,14 +28,13 @@ Crie um arquivo `.env` na raiz do projeto:
 DB_HOST=your_supabase_host
 
 # JWT
-JWT_SECRET=your_super_secret_jwt_key
+JWT_SECRET=secret_jwt_key
 
-# Email (Nodemailer)
-ETHEREAL_USER=smtp.gmail.com
-ETHEREAL_PASS=your_app_password
+# Email
+GMAIL_USER=domain.gmail.com
+GMAIL_APP_PASSWORD=create_gmail_password
 
 # Server
-PORT=3000
 NODE_ENV=development
 ```
 
