@@ -1,6 +1,5 @@
-export class permissaoUsuario {
-  constructor({ id_usuario, id_permissao,id}) {
-    this.id = id;
+export class permissoesUsuarios {
+  constructor({ id_usuario, id_permissao}) {
     this.id_usuario = id_usuario;
     this.id_permissao = id_permissao;
   }

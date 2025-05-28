@@ -16,8 +16,8 @@ export const create = async (dados) => {
 
 export const findAll = async () => {
   const modulos = await db("permissoesUsuario")
-    .join("permissoes", "permissoesUsuario.id_permissao", "permissoes.id")
-    .join("usuarios","permissoesUsuario.id_usuario","usuarios.id")
+    .join(tabelaPermissao, "permissoesUsuario.id_permissao", "permissoes.id")
+    .join(tabelaUsuarios,"permissoesUsuario.id_usuario","usuarios.id")
     .select("*");
 
     if (!modulos) {
@@ -30,8 +30,8 @@ export const findAll = async () => {
 
 export const findOne = async (id) => {
   const modulos = await db("permissoesUsuario")
-    .join("permissoes", "permissoesUsuario.id_permissao", "permissoes.id")
-    .join("usuarios","permissoesUsuario.id_usuario","usuarios.id")
+    .join(tabelaPermissao, "permissoesUsuario.id_permissao", "permissoes.id")
+    .join(tabelaUsuarios,"permissoesUsuario.id_usuario","usuarios.id")
     .where("usuarios.id", id)
     .select("*");
 
@@ -86,7 +86,7 @@ export const remove = async (id) => {
   return result[0];
 };
 
-export const repository_permissoesUsuario = {
+export const repository_permissoesUsuarios = {
   create,
   findAll,
   findOne,

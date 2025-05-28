@@ -4,7 +4,10 @@ const tabela = "roles";
 
 export const create = async (dados) => {
   const dadosMapeados = {
-    nome: dados.nome
+    nome: dados.nome,
+    admin: dados.admin,
+    editor: dados.editor,
+    leitor: dados.leitor
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 
@@ -16,8 +19,11 @@ export const findAll = async () => {
 
   return modulos.map((modulos) => ({
     id: modulos.id,
-    nome: modulos.nome
-   
+    nome: modulos.nome,
+    admin: modulos.admin,
+    editor: modulos.editor,
+    leitor: modulos.leitor
+    
   }));
 };
 
@@ -27,7 +33,10 @@ export const findOne = async (id) => {
   if (modulos) {
     return {
       id: modulos.id,
-      nome: modulos.nome
+      nome: modulos.nome,
+      admin: modulos.admin,
+      editor: modulos.editor,
+      leitor: modulos.leitor
     };
   }
   return null;
@@ -35,7 +44,10 @@ export const findOne = async (id) => {
 
 export const update = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome
+    nome: dados.nome,
+    admin: dados.admin,
+    editor: dados.editor,
+    leitor: dados.leitor
 };
 
   const result = await db(tabela)
@@ -52,6 +64,9 @@ export const update = async (id, dados) => {
 export const patch = async (id, dados) => {
   const dadosMapeados = {
     nome: dados.nome,
+    admin: dados.admin,
+    editor: dados.editor,
+    leitor: dados.leitor
   };
 
   const result = await db(tabela)
@@ -74,7 +89,7 @@ export const remove = async (id) => {
   return result[0];
 };
 
-export const repository_permissoes = {
+export const repository_roles = {
   create,
   findAll,
   findOne,

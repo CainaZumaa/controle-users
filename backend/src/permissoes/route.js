@@ -2,19 +2,19 @@ import express from "express";
 import {
   getAllPermissoes,
   getPermissao,
-  createPermissoes,
-  updatePermissoes,
-  patchPermissoes,
-  deletePermissoes,
+  createPermissao,
+  updatePermissao,
+  patchPermissao,
+  deletePermissao,
 } from "./controller.js";
 
 const router = express.Router();
 
-router.get("/permissao", getAllPermissoes);
+router.get("/permissoes", getAllPermissoes);
 router.get("/permissao/:id", getPermissao);
-router.post("/permissao", createPermissoes);
-router.put("/permissao/:id", updatePermissoes);
-router.patch("/permissao/:id", patchPermissoes);
-router.delete("/permissao/:id", deletePermissoes);
+router.post("/permissao", createPermissao);
+router.put("/permissao/:id", updatePermissao);
+router.patch("/permissao/:id", patchPermissao);
+router.delete("/permissao/:id", deletePermissao);
 
 export default router;
