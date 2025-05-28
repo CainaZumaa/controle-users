@@ -32,7 +32,7 @@ export const magicAuthController = {
         user.id
       );
 
-      await sendMagicLinkEmail(user.email, magicToken);
+      await sendMagicLinkEmail(user.email, magicToken, authToken);
 
       res.json({
         success: true,

@@ -14,7 +14,11 @@ export const login = async (req, res) => {
     await usuariosService.checkAndUpdateLogin(usuario.id);
 
     const token = jwt.sign(
-      { id: usuario.id, email: usuario.email, is_active: usuario.is_active },
+      {
+        sub: usuario.id,
+        email: usuario.email,
+        is_active: usuario.is_active,
+      },
       process.env.JWT_SECRET,
       { expiresIn: "1d" }
     );
