@@ -1,10 +1,10 @@
 # User Management API
 
-Sistema centralizado de gerenciamento de usuários e autenticação para múltiplas equipes e projetos acadêmicos.
+Sistema centralizado de gerenciamento de usuários e autenticação para múltiplas equipes.
 
 ## 📋 Sobre o Projeto
 
-Esta API serve como **centro do sistema**, fornecendo serviços de autenticação e gerenciamento de usuários para todas as outras equipes e projetos. Oferece endpoints para criação, autenticação e gestão de usuários com suporte a autenticação tradicional (email/senha) e Magic Link.
+Esta API serve como **centro do sistema**, fornecendo serviços de autenticação e gerenciamento de usuários para todas as outras equipes/projetos. Oferece endpoints para criação, autenticação e gestão de usuários com suporte a autenticação tradicional (email/senha) e Magic Link.
 
 ## 🚀 Tecnologias
 
@@ -28,7 +28,7 @@ Crie um arquivo `.env` na raiz do projeto:
 DB_HOST=your_supabase_host
 
 # JWT
-JWT_SECRET=secret_jwt_key
+JWT_SECRET=3f8x!B2q9$zP5%vK7&mY4*W6eD1c
 
 # Email
 GMAIL_USER=domain.gmail.com
@@ -89,12 +89,13 @@ POST /auth/magic
 
 #### 👥 Usuários
 ```http
-GET    /usuarios         # Listar usuários (protegida)
-GET    /usuarios/:id     # Buscar usuário (protegida)
 POST   /usuarios         # Criar usuário (pública)
-PUT    /usuarios/:id     # Atualizar usuário (protegida)
-PATCH  /usuarios/:id     # Atualização parcial (protegida)
-DELETE /usuarios/:id     # Remover usuário (protegida)
+
+GET    /usuarios         # Listar usuários (privada)
+GET    /usuarios/:id     # Buscar usuário (privada)
+PUT    /usuarios/:id     # Atualizar usuário (privada)
+PATCH  /usuarios/:id     # Atualização parcial (privada)
+DELETE /usuarios/:id     # Remover usuário (privada)
 ```
 
 ### Exemplos de Uso
@@ -114,7 +115,7 @@ POST /login
   "usuario": {
     "id": 1,
     "nome": "Diego Cardoso",
-    "email": "usuario@example.com"
+    "email": "diego@example.com"
   }
 }
 ```
@@ -141,7 +142,7 @@ POST /auth/magic
 POST /usuarios
 {
   "nome": "Diego Cardoso",
-  "email": "usuario@example.com",
+  "email": "diego@example.com",
   "senha": "senha123"
 }
 
@@ -232,13 +233,12 @@ const protectedResponse = await fetch('http://localhost:3000/usuarios', {
 });
 ```
 
-- **Issues**: [GitHub Issues](https://github.com/CainaZumaa/backend/issues)
-
 ## 📝 Scripts Disponíveis
 
 ```bash
+npm i           # Instala todas as dependências do projeto
 npm run dev     # Inicia servidor em modo desenvolvimento
 npm run seed    # Executa seeds do banco de dados
 ```
 
-**Desenvolvido para o projeto universitário acadêmico** | Equipe Backend - Sistema de Gerenciamento de Usuários
+**Desenvolvido para o Projeto Backend Acadêmico** | Equipe Backend - Sistema de Gerenciamento de Usuários _(Users Management)_
