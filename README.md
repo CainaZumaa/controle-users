@@ -187,18 +187,6 @@ src/
 - Validação de entrada de dados
 - Middleware de autenticação para rotas protegidas
 
-## 🚦 Status Codes
-
-| Status | Descrição |
-|--------|-----------|
-| 200 | Operação realizada com sucesso |
-| 201 | Recurso criado com sucesso |
-| 400 | Dados inválidos ou ausentes |
-| 401 | Credenciais inválidas |
-| 403 | Conta inativa |
-| 404 | Recurso não encontrado |
-| 500 | Erro interno do servidor |
-
 ## 🤝 Integração com Outras Equipes
 
 ### Para Desenvolvedores de Outras Equipes
