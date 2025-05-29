@@ -205,9 +205,10 @@ src/
 
 1. **Base URL**: `http://localhost:3000`
 2. **Documentação**: `/api-docs`
-3. **Autenticação**: Inclua o header `Authorization: Bearer <token>` `JWT_SECRET=3f8x!B2q9$zP5%vK7&mY4*W6eD1c`
-4. **Criação de Usuários**: Endpoint público em `/usuarios`
-5. **Validação de Token**: Decodifique o JWT para obter dados do usuário
+3. **Autenticação**: Inclua o header `Authorization: Bearer <token>`
+4. **Adicione no .env**: `JWT_SECRET=3f8x!B2q9$zP5%vK7&mY4*W6eD1c`
+5. **Criação de Usuários**: Endpoint público em `/usuarios`
+6. **Validação de Token**: Decodifique o JWT para obter dados do usuário
 
 ### Exemplo de Integração
 
