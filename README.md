@@ -42,7 +42,7 @@ NODE_ENV=development
 
 ```bash
 # Clone o repositório
-git clone https://github.com/CainaZumaa/backend.git
+git clone https://github.com/CainaZumaa/controle-users.git
 cd backend
 
 # Instale as dependências
@@ -172,6 +172,11 @@ src/
 │   └── auth.js          # Middleware de autenticação
 └── swagger.json         # Documentação API
 ```
+## 🔑 Validação de Token JWT
+O token pode ser validado verificando sua assinatura pelo site jwt.io _(https://jwt.io/)_
+
+## ⚖️ Regras de Negócio
+Usuários com mais de 30 dias de cadastro são automaticamente desativados.
 
 ### Princípios Seguidos
 - **Separação de responsabilidades**
