@@ -2,8 +2,8 @@ import { permissoesService } from "./service.js";
 
 export const getAllPermissoes = async (_, res) => {
   try {
-    const usuarios = await permissoesService.findAll();
-    res.status(200).json(usuarios);
+    const permissao = await permissoesService.findAll();
+    res.status(200).json(permissao);
   } catch (error) {
     res
       .status(500)
@@ -14,17 +14,17 @@ export const getAllPermissoes = async (_, res) => {
 export const getPermissao = async (req, res) => {
   try {
     const { id } = req.params;
-    const Permissão = await permissoesService.findOne(id);
-    if (!Permissão) {
+    const permissao = await permissoesService.findOne(id);
+    if (!permissao) {
       return res.status(404).json({ error: "Permissão não encontrado" });
     }
-    res.status(200).json(Permissão);
+    res.status(200).json(permissao);
   } catch (error) {
-    res.status(500).json({ error: "Erro ao buscar usuário: " + error.message });
+    res.status(500).json({ error: "Erro ao buscar permissão: " + error.message });
   }
 };
 
-export const createPermissoes = async (req, res) => {
+export const createPermissao = async (req, res) => {
   try {
     const dados = req.body;
     await permissoesService.create(dados);
@@ -34,7 +34,7 @@ export const createPermissoes = async (req, res) => {
   }
 };
 
-export const updatePermissoes = async (req, res) => {
+export const updatePermissao = async (req, res) => {
   try {
     const { id } = req.params;
     const dados = req.body;
@@ -47,7 +47,7 @@ export const updatePermissoes = async (req, res) => {
   }
 };
 
-export const patchPermissoes = async (req, res) => {
+export const patchPermissao = async (req, res) => {
   try {
     const { id } = req.params;
     const dados = req.body;
@@ -60,7 +60,7 @@ export const patchPermissoes = async (req, res) => {
   }
 };
 
-export const deletePermissoes = async (req, res) => {
+export const deletePermissao = async (req, res) => {
   try {
     const { id } = req.params;
     await permissoesService.remove(id);

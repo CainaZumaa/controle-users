@@ -1,12 +1,12 @@
 export class Permissoes {
-  constructor({ id, nome, descricao }) {
+  constructor({ id, nome, criado_em, inserir, editar,deletar,ler}) {
     this.id = id;
     this.nome = nome;
-    this.criado_em = new Date();
-    this.inserir = false;
-    this.editar = false;
-    this.deletar = false;
-    this.ler = true
+    this.criado_em = criado_em;
+    this.inserir = inserir;
+    this.editar = editar;
+    this.deletar = deletar;
+    this.ler = ler;
   }
 
   static validate(dados) {
