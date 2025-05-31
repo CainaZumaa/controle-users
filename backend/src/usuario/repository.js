@@ -107,6 +107,7 @@ export const repository_usuarios = {
   findOne,
   findByEmail,
   update,
+  patch,
   remove,
   updateLastLogin,
 };
