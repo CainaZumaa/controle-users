@@ -3,6 +3,7 @@ import express from "express";
 import { swaggerDocument, swaggerUi } from "./swagger.js";
 import usuarioRoutes from "./src/usuario/route.js";
 import authRoutes from "./src/auth/auth.routes.js";
+import passwordRoutes from "./src/passwordCheck/passwordRoutes.js";
 
 const app = express();
 const port = 3000;
@@ -11,8 +12,7 @@ app.use(express.json());
 
 app.use("/auth", authRoutes);
 app.use("/usuarios", usuarioRoutes);
-
-app.use("/", authRoutes);
+app.use("/", passwordRoutes);
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

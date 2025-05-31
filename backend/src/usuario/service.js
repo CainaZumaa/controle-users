@@ -12,11 +12,12 @@ export const usuariosService = {
   async create(dados) {
     Usuario.validate(dados);
     const senhaHash = await passwordHash(dados.senha);
-    await repository_usuarios.create({
+    const novoUsuario = await repository_usuarios.create({
       nome: dados.nome,
       email: dados.email,
       senha: senhaHash,
     });
+    return novoUsuario;
   },
 
   async findAll() {

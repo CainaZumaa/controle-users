@@ -14,7 +14,7 @@ export const checkPasswordStrength = async (req, res) => {
   }
 };
 
-const analyzePassword = (password) => {
+export const analyzePassword = (password) => {
   let score = 0;
   const checks = {
     length: password.length >= 8,
@@ -57,7 +57,7 @@ const isCommonPassword = (password) => {
   return common.includes(password.toLowerCase());
 };
 
-const getRecommendations = (checks) => {
+export const getRecommendations = (checks) => {
   const recommendations = [];
 
   if (!checks.length) recommendations.push("Use pelo menos 8 caracteres");

@@ -167,7 +167,7 @@ export const sendWelcomeEmail = async (email, userName) => {
   try {
     const info = await transporter.sendMail(mailOptions);
     console.log(
-      `\n👋🎉 E-mail de boas-vindas enviado com sucesso para: ${email} (ID: ${info.messageId})`
+      `\n👋🎉 E-mail de boas-vindas enviado com sucesso para: ${email}`
     );
     return info;
   } catch (error) {
