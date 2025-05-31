@@ -16,19 +16,23 @@ app.use("/", authRoutes);
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-
 app.listen(port, () => {
   console.log(`\n🚀 Servidor rodando com sucesso em http://localhost:${port}`);
   console.log(`\n--------------------------------------------------`);
-  console.log(`📜 Rotas Disponíveis:`);
+  console.log(`📜 Rotas Principais:`);
   console.log(`--------------------------------------------------`);
   console.log(`🔑 Autenticação:`);
   console.log(`  ➡️  POST /auth/login`);
   console.log(`  ➡️  POST /auth/validate`);
   console.log(`  ➡️  POST /auth/check`);
+  console.log(`  ➡️  POST /auth/magic`);
   console.log(`\n👤 Usuários:`);
   console.log(`  ➡️  POST /usuarios`);
   console.log(`  ➡️  GET  /usuarios`);
+  console.log(`  ➡️  GET  /usuarios/:id`);
+  console.log(`  ➡️  PUT  /usuarios/:id`);
+  console.log(`  ➡️  PATCH /usuarios/:id`);
+  console.log(`  ➡️  DELETE /usuarios/:id`);
   console.log(`\n📄 Documentação:`);
   console.log(`  ➡️  GET  /api-docs (Swagger)`);
   console.log(`--------------------------------------------------\n`);

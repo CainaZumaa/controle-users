@@ -108,10 +108,14 @@ const generateMagicLinkTemplate = (magicLink, userEmail, tokenJwt) => `
 export const testEmailConfiguration = async () => {
   try {
     await transporter.verify();
-    console.log("✅ Configuração de email válida");
+    console.log(
+      "\nConfiguração de E-mail: ✅ VERIFICADA! Tudo pronto para enviar 📬"
+    );
     return true;
   } catch (error) {
-    console.error("❌ Erro na configuração de email:", error.message);
+    console.error(
+      `\nConfiguração de E-mail: ❌ FALHA! Detalhes: ${error.message}`
+    );
     return false;
   }
 };
@@ -162,10 +166,14 @@ export const sendWelcomeEmail = async (email, userName) => {
 
   try {
     const info = await transporter.sendMail(mailOptions);
-    console.log(`Email de boas-vindas enviado para: ${email}`);
+    console.log(
+      `\n👋🎉 E-mail de boas-vindas enviado com sucesso para: ${email} (ID: ${info.messageId})`
+    );
     return info;
   } catch (error) {
-    console.error("Erro ao enviar email de boas-vindas:", error.message);
+    console.error(
+      `\n🔥❌ Erro ao enviar e-mail de boas-vindas para ${email}: ${error.message}`
+    );
     throw error;
   }
 };
