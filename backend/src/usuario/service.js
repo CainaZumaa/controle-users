@@ -62,6 +62,7 @@ export const usuariosService = {
       id: usuario.id,
       nome: usuario.nome,
       email: usuario.email,
+      is_active: usuario.is_active,
     };
   },
 
@@ -73,6 +74,7 @@ export const usuariosService = {
       id: usuario.id,
       nome: usuario.nome,
       email: usuario.email,
+      is_active: usuario.is_active,
     };
   },
 

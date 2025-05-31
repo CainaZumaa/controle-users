@@ -20,154 +20,11 @@
       }
     },
     "schemas": {
-      "Usuario": {
+      "ErrorResponse": {
         "type": "object",
         "properties": {
-          "id": {
-            "type": "integer",
-            "example": 1
-          },
-          "nome": {
-            "type": "string",
-            "example": "João Silva"
-          },
-          "email": {
-            "type": "string",
-            "example": "joao@example.com"
-          },
-          "is_active": {
-            "type": "boolean",
-            "example": true
-          },
-          "last_login": {
-            "type": "string",
-            "format": "date-time",
-            "example": "2024-01-15T10:30:00Z",
-            "nullable": true
-          }
-        }
-      },
-      "UsuarioCreate": {
-        "type": "object",
-        "required": ["nome", "email", "senha"],
-        "properties": {
-          "nome": {
-            "type": "string",
-            "example": "João Silva"
-          },
-          "email": {
-            "type": "string",
-            "example": "joao@example.com"
-          },
-          "senha": {
-            "type": "string",
-            "example": "123456"
-          }
-        }
-      },
-      "UsuarioUpdate": {
-        "type": "object",
-        "required": ["nome", "email", "senha"],
-        "properties": {
-          "nome": {
-            "type": "string",
-            "example": "João Silva"
-          },
-          "email": {
-            "type": "string",
-            "example": "joao@example.com"
-          },
-          "senha": {
-            "type": "string",
-            "example": "123456"
-          }
-        }
-      },
-      "UsuarioPatch": {
-        "type": "object",
-        "properties": {
-          "nome": {
-            "type": "string",
-            "example": "João Silva"
-          },
-          "email": {
-            "type": "string",
-            "example": "joao@example.com"
-          },
-          "senha": {
-            "type": "string",
-            "example": "123456"
-          }
-        }
-      },
-      "Login": {
-        "type": "object",
-        "required": ["email", "senha"],
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "joao@example.com"
-          },
-          "senha": {
-            "type": "string",
-            "example": "123456"
-          }
-        }
-      },
-      "LoginResponse": {
-        "type": "object",
-        "properties": {
-          "token": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-          },
-          "usuario": {
-            "type": "object",
-            "properties": {
-              "id": {
-                "type": "integer",
-                "example": 1
-              },
-              "nome": {
-                "type": "string",
-                "example": "João Silva"
-              },
-              "email": {
-                "type": "string",
-                "example": "joao@example.com"
-              }
-            }
-          }
-        }
-      },
-      "MagicLinkRequest": {
-        "type": "object",
-        "required": ["email"],
-        "properties": {
-          "email": {
-            "type": "string",
-            "example": "joao@example.com"
-          }
-        }
-      },
-      "MagicLinkResponse": {
-        "type": "object",
-        "properties": {
-          "success": {
-            "type": "boolean",
-            "example": true
-          },
-          "message": {
-            "type": "string",
-            "example": "Link enviado! (Em prod isso não seria exibido)"
-          },
-          "Link": {
-            "type": "string",
-            "example": "http://localhost:3000/auth/magic/verify?token=abc123"
-          },
-          "TokenJwt": {
-            "type": "string",
-            "example": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+          "error": {
+            "type": "string"
           }
         }
       },
@@ -179,23 +36,80 @@
           }
         }
       },
-      "ErrorResponse": {
+      "Usuario": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "string"
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "is_active": { "type": "boolean" },
+          "last_login": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
           }
         }
       },
-      "MagicLinkError": {
+      "UsuarioCreate": {
+        "type": "object",
+        "required": ["nome", "email", "senha"],
+        "properties": {
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        }
+      },
+      "UsuarioUpdate": {
+        "type": "object",
+        "required": ["nome", "email", "senha"],
+        "properties": {
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        }
+      },
+      "UsuarioPatch": {
         "type": "object",
         "properties": {
-          "error": {
-            "type": "string"
-          },
-          "message": {
-            "type": "string"
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "required": ["email", "senha"],
+        "properties": {
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string" },
+          "usuario": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "nome": { "type": "string" },
+              "email": { "type": "string" }
+            }
           }
+        }
+      },
+      "MagicLinkRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": { "email": { "type": "string" } }
+      },
+      "MagicLinkResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "message": { "type": "string" },
+          "Link": { "type": "string" },
+          "TokenJwt": { "type": "string" }
         }
       }
     }
@@ -205,55 +119,20 @@
       "post": {
         "tags": ["Authentication"],
         "summary": "Request magic link authentication",
-        "description": "Envia um magic link para o email do usuário para autenticação sem senha",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/MagicLinkRequest"
-              }
+              "schema": { "$ref": "#/components/schemas/MagicLinkRequest" }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Magic link enviado com sucesso",
+            "description": "Magic link enviado",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MagicLinkResponse"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Formato de email inválido",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Email não encontrado",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/MagicLinkError"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
+                "schema": { "$ref": "#/components/schemas/MagicLinkResponse" }
               }
             }
           }
@@ -264,54 +143,77 @@
       "post": {
         "tags": ["Authentication"],
         "summary": "Login do usuário",
-        "description": "Autentica usuário com email e senha, retorna JWT token",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/Login"
-              }
+              "schema": { "$ref": "#/components/schemas/Login" }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Login realizado com sucesso",
+            "description": "Login realizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LoginResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/validate": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Validar token JWT",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Token válido",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/LoginResponse"
+                  "type": "object",
+                  "properties": {
+                    "valid": { "type": "boolean" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "email": { "type": "string" },
+                        "is_active": { "type": "boolean" }
+                      }
+                    },
+                    "token_info": {
+                      "type": "object",
+                      "properties": {
+                        "issued_at": { "type": "string" },
+                        "expires_at": { "type": "string" },
+                        "expires_in_seconds": { "type": "integer" }
+                      }
+                    }
+                  }
                 }
               }
             }
-          },
-          "401": {
-            "description": "Credenciais inválidas",
+          }
+        }
+      }
+    },
+    "/auth/check": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Verificação simples de token",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Resultado da verificação",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "403": {
-            "description": "Conta inativa",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "type": "object",
+                  "properties": { "valid": { "type": "boolean" } }
                 }
               }
             }
@@ -323,51 +225,20 @@
       "post": {
         "tags": ["Users"],
         "summary": "Criar novo usuário",
-        "description": "Cria um novo usuário no sistema",
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UsuarioCreate"
-              }
+              "schema": { "$ref": "#/components/schemas/UsuarioCreate" }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Usuário criado com sucesso",
+            "description": "Usuário criado",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessMessage"
-                },
-                "example": {
-                  "message": "Usuário criado com sucesso"
-                }
-              }
-            }
-          },
-          "400": {
-            "description": "Dados obrigatórios não informados",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "error": "Nome, email e senha são obrigatórios"
-                }
-              }
-            }
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
               }
             }
           }
@@ -375,13 +246,8 @@
       },
       "get": {
         "tags": ["Users"],
-        "summary": "Listar todos os usuários",
-        "description": "Retorna lista de todos os usuários cadastrados",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "summary": "Listar todos usuários",
+        "security": [{ "bearerAuth": [] }],
         "responses": {
           "200": {
             "description": "Lista de usuários",
@@ -389,22 +255,7 @@
               "application/json": {
                 "schema": {
                   "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/Usuario"
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Token não fornecido ou inválido"
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
+                  "items": { "$ref": "#/components/schemas/Usuario" }
                 }
               }
             }
@@ -416,22 +267,13 @@
       "get": {
         "tags": ["Users"],
         "summary": "Buscar usuário por ID",
-        "description": "Retorna os dados de um usuário específico",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID do usuário",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "schema": { "type": "integer" }
           }
         ],
         "responses": {
@@ -439,35 +281,7 @@
             "description": "Dados do usuário",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/Usuario"
-                }
-              }
-            }
-          },
-          "404": {
-            "description": "Usuário não encontrado",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                },
-                "example": {
-                  "error": "Usuário não encontrado"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Token não fornecido ou inválido"
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
+                "schema": { "$ref": "#/components/schemas/Usuario" }
               }
             }
           }
@@ -475,59 +289,30 @@
       },
       "put": {
         "tags": ["Users"],
-        "summary": "Atualizar usuário completamente",
-        "description": "Atualiza todos os campos do usuário (substituição completa)",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "summary": "Atualizar usuário",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID do usuário",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "schema": { "type": "integer" }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UsuarioUpdate"
-              }
+              "schema": { "$ref": "#/components/schemas/UsuarioUpdate" }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Usuário atualizado com sucesso",
+            "description": "Usuário atualizado",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessMessage"
-                },
-                "example": {
-                  "message": "Usuário atualizado com sucesso"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Token não fornecido ou inválido"
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
               }
             }
           }
@@ -535,59 +320,30 @@
       },
       "patch": {
         "tags": ["Users"],
-        "summary": "Atualizar usuário parcialmente",
-        "description": "Atualiza apenas os campos fornecidos do usuário",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "summary": "Atualização parcial",
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID do usuário",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "schema": { "type": "integer" }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/UsuarioPatch"
-              }
+              "schema": { "$ref": "#/components/schemas/UsuarioPatch" }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Usuário atualizado com sucesso",
+            "description": "Usuário atualizado",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessMessage"
-                },
-                "example": {
-                  "message": "Usuário atualizado com sucesso"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Token não fornecido ou inválido"
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
               }
             }
           }
@@ -596,48 +352,21 @@
       "delete": {
         "tags": ["Users"],
         "summary": "Remover usuário",
-        "description": "Remove um usuário do sistema",
-        "security": [
-          {
-            "bearerAuth": []
-          }
-        ],
+        "security": [{ "bearerAuth": [] }],
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "ID do usuário",
-            "schema": {
-              "type": "integer",
-              "example": 1
-            }
+            "schema": { "type": "integer" }
           }
         ],
         "responses": {
           "200": {
-            "description": "Usuário removido com sucesso",
+            "description": "Usuário removido",
             "content": {
               "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/SuccessMessage"
-                },
-                "example": {
-                  "message": "Usuário removido com sucesso"
-                }
-              }
-            }
-          },
-          "401": {
-            "description": "Token não fornecido ou inválido"
-          },
-          "500": {
-            "description": "Erro interno do servidor",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/ErrorResponse"
-                }
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
               }
             }
           }
