@@ -206,6 +206,7 @@ Usuários com mais de 30 dias de cadastro são automaticamente desativados.
 
 `GMAIL_USER=profissionalcarloszuma@gmail.com`
 `GMAIL_APP_PASSWORD=imdm gbyk egij sohc`
+
 5. **Criação de Usuários**: Endpoint público em `/usuarios`
 6. **Validação de Token**: Decodifique o JWT para obter dados do usuário
 
