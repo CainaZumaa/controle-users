@@ -10,11 +10,11 @@ import {
 
 const router = express.Router();
 
-router.get("/Modulos", getAllModulos);
-router.get("/Modulos/:id", getModulos);
-router.post("/Modulos", createModulos);
-router.put("/Modulos/:id", updateModulos);
-router.patch("/Modulos/:id", patchModulos);
-router.delete("/Modulos/:id", deleteModulos);
+router.get("/", getAllModulos);
+router.get("/:id", getModulos);
+router.post("/", createModulos);
+router.put("/:id", updateModulos);
+router.patch("/:id", patchModulos);
+router.delete("/:id", deleteModulos);
 
 export default router;

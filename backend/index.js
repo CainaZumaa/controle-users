@@ -4,6 +4,7 @@ import { swaggerDocument, swaggerUi } from "./swagger.js";
 import usuarioRoutes from "./src/usuario/route.js";
 import authRoutes from "./src/auth/auth.routes.js";
 import passwordRoutes from "./src/passwordCheck/passwordRoutes.js";
+import modulosRoutes from "./src/modulos/route.js";
 
 const app = express();
 const port = 3000;
@@ -13,6 +14,7 @@ app.use(express.json());
 app.use("/auth", authRoutes);
 app.use("/usuarios", usuarioRoutes);
 app.use("/", passwordRoutes);
+app.use("/modulos", modulosRoutes);
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
