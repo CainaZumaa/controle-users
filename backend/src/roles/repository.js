@@ -4,10 +4,8 @@ const tabela = "roles";
 
 export const create = async (dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    admin: dados.admin,
-    editor: dados.editor,
-    leitor: dados.leitor
+    nome: dados.nome
+    
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 
@@ -18,12 +16,8 @@ export const findAll = async () => {
   const modulos = await db(tabela).select("*");
 
   return modulos.map((modulos) => ({
-    id: modulos.id,
-    nome: modulos.nome,
-    admin: modulos.admin,
-    editor: modulos.editor,
-    leitor: modulos.leitor
-    
+    id: modulos.id,    
+    nome: modulos.nome    
   }));
 };
 
@@ -32,11 +26,8 @@ export const findOne = async (id) => {
 
   if (modulos) {
     return {
-      id: modulos.id,
-      nome: modulos.nome,
-      admin: modulos.admin,
-      editor: modulos.editor,
-      leitor: modulos.leitor
+      id: modulos.id,    
+      nome: modulos.nome
     };
   }
   return null;
@@ -44,10 +35,7 @@ export const findOne = async (id) => {
 
 export const update = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    admin: dados.admin,
-    editor: dados.editor,
-    leitor: dados.leitor
+    nome: dados.nome
 };
 
   const result = await db(tabela)
@@ -63,10 +51,7 @@ export const update = async (id, dados) => {
 
 export const patch = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    admin: dados.admin,
-    editor: dados.editor,
-    leitor: dados.leitor
+    nome: dados.nome
   };
 
   const result = await db(tabela)

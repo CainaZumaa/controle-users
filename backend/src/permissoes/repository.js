@@ -4,12 +4,7 @@ const tabela = "permissoes";
 
 export const create = async (dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    descricao: dados.descricao,
-    inserir:dados.inserir,
-    editar:dados.editar,
-    deletar: dados.deletar,
-    ler:dados.ler
+    nome: dados.nome
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 
@@ -21,13 +16,7 @@ export const findAll = async () => {
 
   return modulos.map((modulos) => ({
     id: modulos.id,
-    nome: modulos.nome,
-    descricao: modulos.descricao,
-    criado_em: modulos.criado_em,
-    inserir:modulos.inserir,
-    editar:modulos.editar,
-    deletar: modulos.deletar,
-    ler:modulos.ler
+    nome: modulos.nome
   }));
 };
 
@@ -37,13 +26,7 @@ export const findOne = async (id) => {
   if (modulos) {
     return {
       id: modulos.id,
-      descricao: modulos.descricao,
-      nome: modulos.nome,
-      criado_em: modulos.criado_em,
-      inserir:modulos.inserir,
-      editar:modulos.editar,
-      deletar: modulos.deletar,
-      ler:modulos.ler
+      nome: modulos.nome
     };
   }
   return null;
@@ -51,12 +34,7 @@ export const findOne = async (id) => {
 
 export const update = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    descricao: dados.descricao,
-    inserir:dados.inserir,
-    editar:dados.editar,
-    deletar: dados.deletar,
-    ler:dados.ler
+    nome: dados.nome
 };
 
   const result = await db(tabela)
@@ -72,12 +50,7 @@ export const update = async (id, dados) => {
 
 export const patch = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome,
-    descricao: dados.descricao,
-    inserir:dados.inserir,
-    editar:dados.editar,
-    deletar: dados.deletar,
-    ler:dados.ler
+    nome: dados.nome
   };
 
   const result = await db(tabela)

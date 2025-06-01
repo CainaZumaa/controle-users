@@ -1,10 +1,7 @@
 export class Roles {
-    constructor({ id, nome, admin, editor, leitor}) {
+    constructor({ id, nome}) {
     this.id = id;
-    this.nome = nome;
-    this.admin = admin;
-    this.editor = editor;
-    this.leitor = leitor;
+    this.nome = nome;   
   }
 
   static validate(dados) {
