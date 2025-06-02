@@ -83,7 +83,7 @@ Acesse a documentação interativa em: `http://localhost:3000/api-docs`
 
 #### 🔑 Autenticação
 ```http
-POST /login
+POST /auth/login
 POST /auth/magic
 ```
 
