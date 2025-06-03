@@ -1,5 +1,5 @@
-import {repository_permissoes} from "./repository";
-import {Permissoes} from "./model";
+import { repository_permissoes } from "./repository.js";
+import { Permissoes } from "./model.js";
 
 export const permissoesService = {
   async create(dados) {

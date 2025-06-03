@@ -5,6 +5,8 @@ const tabela = "roles";
 export const create = async (dados) => {
   const dadosMapeados = {
     nome: dados.nome,
+    user_email: dados.user_email,
+    permissao: dados.permissao,
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 

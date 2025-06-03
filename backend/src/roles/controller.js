@@ -5,9 +5,7 @@ export const getAllRoles = async (_, res) => {
     const roles = await RolesService.findAll();
     res.status(200).json(roles);
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Erro ao buscar: " + error.message });
+    res.status(500).json({ error: "Erro ao buscar: " + error.message });
   }
 };
 
@@ -41,9 +39,7 @@ export const updateRole = async (req, res) => {
     await RolesService.update(id, dados);
     res.status(200).json({ message: "atualizado com sucesso" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Erro ao atualizar: " + error.message });
+    res.status(500).json({ error: "Erro ao atualizar: " + error.message });
   }
 };
 
@@ -54,9 +50,7 @@ export const patchRole = async (req, res) => {
     await RolesService.update(id, dados);
     res.status(200).json({ message: "atualizado com sucesso" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Erro ao atualizar: " + error.message });
+    res.status(500).json({ error: "Erro ao atualizar: " + error.message });
   }
 };
 
@@ -66,8 +60,6 @@ export const deleteRole = async (req, res) => {
     await RolesService.remove(id);
     res.status(200).json({ message: "removido com sucesso" });
   } catch (error) {
-    res
-      .status(500)
-      .json({ error: "Erro ao remover: " + error.message });
+    res.status(500).json({ error: "Erro ao remover: " + error.message });
   }
 };

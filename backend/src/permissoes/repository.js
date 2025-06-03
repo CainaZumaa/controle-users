@@ -4,29 +4,33 @@ const tabela = "permissoes";
 
 export const create = async (dados) => {
   const dadosMapeados = {
-    nome: dados.nome
+    user_email: dados.user_email,
+    tipo_permissao: dados.tipo_permissao,
   };
-  const result = await db(tabela).insert(dadosMapeados).returning("*");
-
+  const [result] = await db(tabela).insert(dadosMapeados).returning("*");
   return result;
 };
 
 export const findAll = async () => {
-  const modulos = await db(tabela).select("*");
-
-  return modulos.map((modulos) => ({
-    id: modulos.id,
-    nome: modulos.nome
+  const permissoes = await db(tabela).select(
+    "id",
+    "user_email",
+    "tipo_permissao"
+  );
+  return permissoes.map((permissao) => ({
+    id: permissao.id,
+    user_email: permissao.user_email,
+    tipo_permissao: permissao.tipo_permissao,
   }));
 };
 
 export const findOne = async (id) => {
-  const modulos = await db(tabela).where({ id }).first();
-
-  if (modulos) {
+  const permissao = await db(tabela).where({ id }).first();
+  if (permissao) {
     return {
-      id: modulos.id,
-      nome: modulos.nome
+      id: permissao.id,
+      user_email: permissao.user_email,
+      tipo_permissao: permissao.tipo_permissao,
     };
   }
   return null;
@@ -34,43 +38,51 @@ export const findOne = async (id) => {
 
 export const update = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome
-};
-
-  const result = await db(tabela)
+    user_email: dados.user_email,
+    tipo_permissao: dados.tipo_permissao,
+  };
+  const [result] = await db(tabela)
     .where({ id })
     .update(dadosMapeados)
     .returning("*");
 
-  if (!result || result.length === 0) {
+  if (!result) {
     throw new Error("Nenhum registro foi atualizado.");
   }
-  return result[0];
+  return result;
 };
 
 export const patch = async (id, dados) => {
-  const dadosMapeados = {
-    nome: dados.nome
-  };
+  const dadosMapeados = {};
+  if (dados.user_email !== undefined) {
+    dadosMapeados.user_email = dados.user_email;
+  }
+  if (dados.tipo_permissao !== undefined) {
+    dadosMapeados.tipo_permissao = dados.tipo_permissao;
+  }
 
-  const result = await db(tabela)
+  if (Object.keys(dadosMapeados).length === 0) {
+    throw new Error("Nenhum dado válido fornecido para atualização parcial.");
+  }
+
+  const [result] = await db(tabela)
     .where({ id })
     .update(dadosMapeados)
     .returning("*");
 
-  if (!result || result.length === 0) {
+  if (!result) {
     throw new Error("Nenhum registro foi atualizado.");
   }
-  return result[0];
+  return result;
 };
 
 export const remove = async (id) => {
-  const result = await db(tabela).where({ id }).delete().returning("*");
+  const [result] = await db(tabela).where({ id }).delete().returning("*");
 
-  if (!result || result.length === 0) {
+  if (!result) {
     throw new Error("Nenhum registro foi removido.");
   }
-  return result[0];
+  return result;
 };
 
 export const repository_permissoes = {
@@ -79,4 +91,5 @@ export const repository_permissoes = {
   findOne,
   update,
   remove,
+  patch,
 };
