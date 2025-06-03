@@ -83,5 +83,6 @@ export const repository_modulos = {
   findAll,
   findOne,
   update,
+  patch,
   remove,
 };
