@@ -1,5 +1,5 @@
-import {repository_roles} from "./repository";
-import {Roles} from "./model";
+import { repository_roles } from "./repository.js";
+import { Roles } from "./model.js";
 
 export const RolesService = {
   async create(dados) {

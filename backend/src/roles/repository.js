@@ -4,8 +4,7 @@ const tabela = "roles";
 
 export const create = async (dados) => {
   const dadosMapeados = {
-    nome: dados.nome
-    
+    nome: dados.nome,
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 
@@ -16,8 +15,8 @@ export const findAll = async () => {
   const modulos = await db(tabela).select("*");
 
   return modulos.map((modulos) => ({
-    id: modulos.id,    
-    nome: modulos.nome    
+    id: modulos.id,
+    nome: modulos.nome,
   }));
 };
 
@@ -26,8 +25,8 @@ export const findOne = async (id) => {
 
   if (modulos) {
     return {
-      id: modulos.id,    
-      nome: modulos.nome
+      id: modulos.id,
+      nome: modulos.nome,
     };
   }
   return null;
@@ -35,8 +34,8 @@ export const findOne = async (id) => {
 
 export const update = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome
-};
+    nome: dados.nome,
+  };
 
   const result = await db(tabela)
     .where({ id })
@@ -51,7 +50,7 @@ export const update = async (id, dados) => {
 
 export const patch = async (id, dados) => {
   const dadosMapeados = {
-    nome: dados.nome
+    nome: dados.nome,
   };
 
   const result = await db(tabela)

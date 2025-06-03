@@ -10,11 +10,11 @@ import {
 
 const router = express.Router();
 
-router.get("/Roles", getAllRoles);
-router.get("/Role/:id", getRole);
-router.post("/Role", createRole);
-router.put("/Role/:id", updateRole);
-router.patch("/Role/:id", patchRole);
-router.delete("/Role/:id", deleteRole);
+router.get("/", getAllRoles);
+router.get("/:id", getRole);
+router.post("/", createRole);
+router.put("/:id", updateRole);
+router.patch("/:id", patchRole);
+router.delete("/:id", deleteRole);
 
 export default router;
