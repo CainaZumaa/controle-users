@@ -9,6 +9,7 @@ import perfilRoutes from "./src/perfis/route.js";
 import rolesRoutes from "./src/roles/route.js";
 import permissoesRoutes from "./src/permissoes/route.js";
 import auditoriaRoutes from "./src/auditoria/route.js";
+import comentariosRoutes from "./src/comentarios/route.js";
 
 const app = express();
 const port = 3000;
@@ -23,6 +24,7 @@ app.use("/perfis", perfilRoutes);
 app.use("/roles", rolesRoutes);
 app.use("/permissoes", permissoesRoutes);
 app.use("/auditoria", auditoriaRoutes);
+app.use("/comentarios", comentariosRoutes);
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
