@@ -78,6 +78,27 @@ export const remove = async (id) => {
   return result[0];
 };
 
+export const incrementar_acessos = async (id) => {
+  const [modulo] = await db("modulos")  
+    .where({ id })
+    .increment("acessos", 1)
+    .returning("*");
+  return modulo
+}
+export const buscar_modulo_mais_acessado = async() => {
+  const modulo = await db("modulos")
+  .orderBy("acessos", "DESC")
+  .first();
+  return modulo
+}
+export const buscar_modulo_menos_acessado = async() => {
+  const modulo = await db("modulos")
+  .orderBy("acessos", "ASC")
+  .first();
+  return modulo
+}
+
+
 export const repository_modulos = {
   create,
   findAll,
@@ -85,4 +106,7 @@ export const repository_modulos = {
   update,
   patch,
   remove,
+  incrementar_acessos,
+  buscar_modulo_mais_acessado,
+  buscar_modulo_menos_acessado
 };

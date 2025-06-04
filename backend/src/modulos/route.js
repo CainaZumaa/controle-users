@@ -6,6 +6,9 @@ import {
   updateModulos,
   patchModulos,
   deleteModulos,
+  incrementar_acessos,
+  buscar_modulo_mais_acessado,
+  buscar_modulo_menos_acessado
 } from "./controller.js";
 
 const router = express.Router();
@@ -22,5 +25,11 @@ router.put("/:id", updateModulos);
 router.patch("/:id", patchModulos);
 /*Deletar Módulo*/
 router.delete("/:id", deleteModulos);
-/*Criar Módulo*/
+
+router.patch("/:id/acessos", incrementar_acessos);
+
+router.get("/report/most-accessed", buscar_modulo_mais_acessado)
+
+router.get("/report/less-accessed", buscar_modulo_menos_acessado)
+
 export default router;

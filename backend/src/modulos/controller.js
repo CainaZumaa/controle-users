@@ -70,4 +70,36 @@ export const deleteModulos = async (req, res) => {
       .status(500)
       .json({ error: "Erro ao remover módulo: " + error.message });
   }
-};
+}
+export const incrementar_acessos = async (req, res) => {
+  try { 
+    const { id } = req.params;
+    const modulo = await modulosService.incrementar_acessos(id)
+    res.status(200).json({ success: true, data:modulo });
+  } catch (error) {
+      res
+        .status(500)
+        .json({ sucesses: false, error: error.message });
+  }
+}
+export const buscar_modulo_mais_acessado  = async (req, res) => {
+  try { 
+    const modulo = await modulosService.buscar_modulo_mais_acessado()
+    res.status(200).json({ success: true, data:modulo });
+  } catch (error) {
+      res
+        .status(500)
+        .json({ sucesses: false, error: error.message });
+  }
+}
+export const buscar_modulo_menos_acessado  = async (req, res) => {
+  try { 
+    const modulo = await modulosService.buscar_modulo_menos_acessado()
+    res.status(200).json({ success: true, data:modulo });
+  } catch (error) {
+      res
+        .status(500)
+        .json({ sucesses: false, error: error.message });
+  }
+}
+;
