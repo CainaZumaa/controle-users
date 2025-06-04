@@ -8,6 +8,7 @@ import modulosRoutes from "./src/modulos/route.js";
 import perfilRoutes from "./src/perfis/route.js";
 import rolesRoutes from "./src/roles/route.js";
 import permissoesRoutes from "./src/permissoes/route.js";
+import auditoriaRoutes from "./src/auditoria/route.js";
 
 const app = express();
 const port = 3000;
@@ -21,6 +22,7 @@ app.use("/modulos", modulosRoutes);
 app.use("/perfis", perfilRoutes);
 app.use("/roles", rolesRoutes);
 app.use("/permissoes", permissoesRoutes);
+app.use("/auditoria", auditoriaRoutes);
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));

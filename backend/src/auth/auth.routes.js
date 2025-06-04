@@ -3,11 +3,12 @@ import express from "express";
 import { login } from "../usuario/authController.js";
 import { magicAuthController } from "../magicAuth/controller.js";
 import { tokenValidationController } from "./auth.controller.js";
+import { auditLogin } from "../middlewares/auditoria.js";
 
 const router = express.Router();
 
 // Rotas de Autenticação
-router.post("/login", login);
+router.post("/login", auditLogin, login);
 
 // Magic Link
 router.post("/magic", magicAuthController.requestMagicLink);
