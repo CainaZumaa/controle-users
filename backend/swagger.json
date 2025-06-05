@@ -159,7 +159,7 @@
           "dados_anteriores": { "type": "object" },
           "dados_novos": { "type": "object" },
           "user_agent": { "type": "string" },
-          "created_at": { 
+          "created_at": {
             "type": "string",
             "format": "date-time"
           }
@@ -491,6 +491,66 @@
         }
       }
     },
+    "/modulos/report/most-accessed": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Retorna o módulo com mais acessos",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Módulo mais acessado retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "nome": { "type": "string" },
+                        "acessos": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/report/less-accessed": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Retorna o módulo com menos acessos",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Módulo menos acessado retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "nome": { "type": "string" },
+                        "acessos": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/modulos/{id}": {
       "get": {
         "tags": ["Modules"],
@@ -608,6 +668,44 @@
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/{id}/acessos": {
+      "patch": {
+        "tags": ["Modules"],
+        "summary": "Incrementa o contador de acessos de um módulo",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Acessos incrementados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "nome": { "type": "string" },
+                        "acessos": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
               }
             }
           }
@@ -1350,7 +1448,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/PasswordStrengthRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/PasswordStrengthRequest"
+              }
             }
           }
         },
@@ -1359,7 +1459,758 @@
             "description": "Resultado da verificação",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/PasswordStrengthResponse" }
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordStrengthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comentarios": {
+      "post": {
+        "tags": ["Comments"],
+        "summary": "Criar novo comentário",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["conteudo", "tipo"],
+                "properties": {
+                  "conteudo": { "type": "string" },
+                  "tipo": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comentário criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Comments"],
+        "summary": "Listar todos os comentários",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de comentários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "conteudo": { "type": "string" },
+                      "tipo": { "type": "string" },
+                      "created_at": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comentarios/{id}": {
+      "get": {
+        "tags": ["Comments"],
+        "summary": "Buscar comentário por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do comentário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "conteudo": { "type": "string" },
+                    "tipo": { "type": "string" },
+                    "created_at": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Comments"],
+        "summary": "Atualizar comentário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["conteudo", "tipo"],
+                "properties": {
+                  "conteudo": { "type": "string" },
+                  "tipo": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comentário atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Comments"],
+        "summary": "Remover comentário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comentário removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comentarios/tipo/{tipo}": {
+      "get": {
+        "tags": ["Comments"],
+        "summary": "Buscar comentários por tipo",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de comentários do tipo especificado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "conteudo": { "type": "string" },
+                      "tipo": { "type": "string" },
+                      "created_at": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles-usuarios": {
+      "get": {
+        "tags": ["User Roles"],
+        "summary": "Listar todas as associações de roles com usuários",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de associações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "usuario_id": { "type": "integer" },
+                      "role_id": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles-usuarios/{id}": {
+      "get": {
+        "tags": ["User Roles"],
+        "summary": "Buscar associação de role com usuário por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da associação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "usuario_id": { "type": "integer" },
+                    "role_id": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["User Roles"],
+        "summary": "Criar nova associação de role com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["usuario_id", "role_id"],
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "role_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Associação criada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["User Roles"],
+        "summary": "Atualizar associação de role com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["usuario_id", "role_id"],
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "role_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["User Roles"],
+        "summary": "Atualização parcial da associação",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "role_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User Roles"],
+        "summary": "Remover associação de role com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Associação removida",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles-permissoes": {
+      "get": {
+        "tags": ["Role Permissions"],
+        "summary": "Listar todas as associações de roles com permissões",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de associações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "role_id": { "type": "integer" },
+                      "permissao_id": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles-permissoes/{id}": {
+      "get": {
+        "tags": ["Role Permissions"],
+        "summary": "Buscar associação de role com permissão por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da associação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "role_id": { "type": "integer" },
+                    "permissao_id": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Role Permissions"],
+        "summary": "Criar nova associação de role com permissão",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["role_id", "permissao_id"],
+                "properties": {
+                  "role_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Associação criada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Role Permissions"],
+        "summary": "Atualizar associação de role com permissão",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["role_id", "permissao_id"],
+                "properties": {
+                  "role_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Role Permissions"],
+        "summary": "Atualização parcial da associação",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "role_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Role Permissions"],
+        "summary": "Remover associação de role com permissão",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Associação removida",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permissoes-usuarios": {
+      "get": {
+        "tags": ["User Permissions"],
+        "summary": "Listar todas as associações de permissões com usuários",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de associações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "usuario_id": { "type": "integer" },
+                      "permissao_id": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permissoes-usuarios/{id}": {
+      "get": {
+        "tags": ["User Permissions"],
+        "summary": "Buscar associação de permissão com usuário por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da associação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "usuario_id": { "type": "integer" },
+                    "permissao_id": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["User Permissions"],
+        "summary": "Criar nova associação de permissão com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["usuario_id", "permissao_id"],
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Associação criada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["User Permissions"],
+        "summary": "Atualizar associação de permissão com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["usuario_id", "permissao_id"],
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["User Permissions"],
+        "summary": "Atualização parcial da associação",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User Permissions"],
+        "summary": "Remover associação de permissão com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Associação removida",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
               }
             }
           }
