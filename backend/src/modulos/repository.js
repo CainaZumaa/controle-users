@@ -97,8 +97,59 @@ export const buscar_modulo_menos_acessado = async() => {
   .first();
   return modulo
 }
+export const findByNome = async (nome) => {
+  const modulos = await db(tabela)
+    .whereILike("nome", `%${nome}%`)
+    .select("*");
+  return modulos;
+};
+export const findAllPaginado = async (pagina = 1, limite = 10, ordem = "asc") => {
+  const offset = (pagina - 1) * limite;
+  const modulos = await db(tabela)
+    .select("*")
+    .orderBy("id", ordem)
+    .limit(limite)
+    .offset(offset);
+  return modulos;
+};
+export const contarModulos = async () => {
+  const [{ count }] = await db(tabela).count("*");
+  return parseInt(count, 10);
+};
+export const resetarAcessos = async () => {
+  await db(tabela).update({ acessos: 0 });
+  return { message: "Acessos resetados com sucesso." };
+};
+export const nomeExiste = async (nome) => {
+  const existe = await db(tabela).where({ nome }).first();
+  return !!existe;
+};
+export const buscarUltimosModulos = async (quantidade = 5) => {
+  const modulos = await db(tabela)
+    .orderBy("id", "desc")
+    .limit(quantidade);
 
+  return modulos;
+};
+export const buscarPorAcessosMinimos = async (minimo = 10) => {
+  const modulos = await db(tabela)
+    .where("acessos", ">=", minimo)
+    .orderBy("acessos", "desc");
 
+  return modulos;
+};
+async function calcularPorcentagemDeAcessos() {
+  const modulos = await db("modulos").select("id", "nome", "acessos");
+
+  const totalAcessos = modulos.reduce((soma, m) => soma + (m.acessos || 0), 0);
+
+  return modulos.map((m) => ({
+    id: m.id,
+    nome: m.nome,
+    acessos: m.acessos,
+    porcentagem: totalAcessos > 0 ? Number(((m.acessos / totalAcessos) * 100).toFixed(2)) : 0
+  }));
+}
 export const repository_modulos = {
   create,
   findAll,
@@ -108,5 +159,13 @@ export const repository_modulos = {
   remove,
   incrementar_acessos,
   buscar_modulo_mais_acessado,
-  buscar_modulo_menos_acessado
+  buscar_modulo_menos_acessado,
+  findByNome,
+  findAllPaginado,
+  contarModulos,
+  resetarAcessos,
+  nomeExiste,
+  buscarUltimosModulos,
+  buscarPorAcessosMinimos,
+  calcularPorcentagemDeAcessos
 };

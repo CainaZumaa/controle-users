@@ -57,4 +57,32 @@ export const modulosService = {
     }
     return modulo;
   },
+  async buscar_por_nome(nome) {
+    return await repository_modulos.findByNome(nome);
+  },
+
+  async listar_modulos_paginado(pagina = 1, limite = 10, ordem = "asc") {
+    return await repository_modulos.findAllPaginado(pagina, limite, ordem);
+  },
+
+  async contar_total_modulos() {
+    return await repository_modulos.contarModulos();
+  },
+  async nome_existe(nome) {
+    return await repository_modulos.nomeExiste(nome);
+  },
+  async resetar_acessos() {
+    return await repository_modulos.resetarAcessos();
+  },
+
+  async buscar_ultimos_modulos(qtd = 5) {
+    return await repository_modulos.buscarUltimosModulos(qtd);
+  },
+
+  async buscar_modulos_com_muitos_acessos(minimo = 10) {
+    return await repository_modulos.buscarPorAcessosMinimos(minimo);
+  },
+  async porcentagem_de_acessos() {
+  return await repository_modulos.calcularPorcentagemDeAcessos();
+},
 };
