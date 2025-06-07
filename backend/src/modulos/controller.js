@@ -6,7 +6,6 @@ export const getAllModulos = async (req, res) => {
 };
 
 export const getModulos = async (req, res) => {
-    console.log("bolinha")
     const { id } = req.params;
     const modulos = await modulosService.findOne(id);
     if (!modulos) {
