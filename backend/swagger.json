@@ -1,0 +1,2527 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "User Management API",
+    "version": "1.0.0",
+    "description": "Projeto de Gerenciamento de Usuário 💻🌐"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Development server"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "bearerFormat": "JWT"
+      }
+    },
+    "schemas": {
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "error": {
+            "type": "string"
+          }
+        }
+      },
+      "SuccessMessage": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string"
+          }
+        }
+      },
+      "Usuario": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "is_active": { "type": "boolean" },
+          "last_login": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          }
+        }
+      },
+      "UsuarioCreate": {
+        "type": "object",
+        "required": ["nome", "email", "senha"],
+        "properties": {
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        }
+      },
+      "UsuarioUpdate": {
+        "type": "object",
+        "required": ["nome", "email", "senha"],
+        "properties": {
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        }
+      },
+      "UsuarioPatch": {
+        "type": "object",
+        "properties": {
+          "nome": { "type": "string" },
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        }
+      },
+      "Login": {
+        "type": "object",
+        "required": ["email", "senha"],
+        "properties": {
+          "email": { "type": "string" },
+          "senha": { "type": "string" }
+        }
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string" },
+          "usuario": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "nome": { "type": "string" },
+              "email": { "type": "string" }
+            }
+          }
+        }
+      },
+      "MagicLinkRequest": {
+        "type": "object",
+        "required": ["email"],
+        "properties": { "email": { "type": "string" } }
+      },
+      "MagicLinkResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "message": { "type": "string" },
+          "Link": { "type": "string" },
+          "TokenJwt": { "type": "string" }
+        }
+      },
+      "Modulo": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "descricao": { "type": "string" },
+          "is_active": { "type": "boolean" }
+        }
+      },
+      "Perfil": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "descricao": { "type": "string" },
+          "is_active": { "type": "boolean" }
+        }
+      },
+      "Role": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "descricao": { "type": "string" },
+          "is_active": { "type": "boolean" }
+        }
+      },
+      "Permissao": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "descricao": { "type": "string" },
+          "codigo": { "type": "string" },
+          "is_active": { "type": "boolean" }
+        }
+      },
+      "AuditoriaLog": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "usuario_email": { "type": "string" },
+          "acao": { "type": "string" },
+          "tabela_afetada": { "type": "string" },
+          "dados_anteriores": { "type": "object" },
+          "dados_novos": { "type": "object" },
+          "user_agent": { "type": "string" },
+          "created_at": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "PasswordStrengthRequest": {
+        "type": "object",
+        "required": ["senha"],
+        "properties": {
+          "senha": { "type": "string" }
+        }
+      },
+      "PasswordStrengthResponse": {
+        "type": "object",
+        "properties": {
+          "score": { "type": "integer" },
+          "feedback": { "type": "string" },
+          "is_strong": { "type": "boolean" }
+        }
+      },
+      "Notificacao": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "mensagem": { "type": "string" },
+          "tipo": { "type": "string" },
+          "lida": { "type": "boolean" },
+          "created_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ModuloAcesso": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "acessos": { "type": "integer" }
+        }
+      },
+      "PaginacaoResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Modulo" }
+          },
+          "total": { "type": "integer" },
+          "page": { "type": "integer" },
+          "limit": { "type": "integer" }
+        }
+      },
+      "MagicLinkVerifyResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "token": { "type": "string" },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "email": { "type": "string" },
+              "is_active": { "type": "boolean" }
+            }
+          }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/auth/magic": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Request magic link authentication",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MagicLinkRequest" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Magic link enviado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/MagicLinkResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/login": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Login do usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/Login" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Login realizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/LoginResponse" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/validate": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Validar token JWT",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Token válido",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "valid": { "type": "boolean" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "email": { "type": "string" },
+                        "is_active": { "type": "boolean" }
+                      }
+                    },
+                    "token_info": {
+                      "type": "object",
+                      "properties": {
+                        "issued_at": { "type": "string" },
+                        "expires_at": { "type": "string" },
+                        "expires_in_seconds": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/check": {
+      "post": {
+        "tags": ["Authentication"],
+        "summary": "Verificação simples de token",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Resultado da verificação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": { "valid": { "type": "boolean" } }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios": {
+      "post": {
+        "tags": ["Users"],
+        "summary": "Criar novo usuário",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UsuarioCreate" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Usuário criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Users"],
+        "summary": "Listar todos usuários",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de usuários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Usuario" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/usuarios/{id}": {
+      "get": {
+        "tags": ["Users"],
+        "summary": "Buscar usuário por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do usuário",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Usuario" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Users"],
+        "summary": "Atualizar usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UsuarioUpdate" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Users"],
+        "summary": "Atualização parcial",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UsuarioPatch" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Usuário atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Users"],
+        "summary": "Remover usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Usuário removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Listar todos os módulos",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de módulos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Modulo" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Modules"],
+        "summary": "Criar novo módulo",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nome"],
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Módulo criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/report/most-accessed": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Retorna o módulo com mais acessos",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Módulo mais acessado retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "nome": { "type": "string" },
+                        "acessos": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/report/less-accessed": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Retorna o módulo com menos acessos",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Módulo menos acessado retornado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "nome": { "type": "string" },
+                        "acessos": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/{id}": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Buscar módulo por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do módulo",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Modulo" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Modules"],
+        "summary": "Atualizar módulo",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nome"],
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Módulo atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Modules"],
+        "summary": "Atualização parcial do módulo",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Módulo atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Modules"],
+        "summary": "Remover módulo",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Módulo removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/{id}/acessos": {
+      "patch": {
+        "tags": ["Modules"],
+        "summary": "Incrementa o contador de acessos de um módulo",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Acessos incrementados com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "nome": { "type": "string" },
+                        "acessos": { "type": "integer" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/perfis": {
+      "get": {
+        "tags": ["Profiles"],
+        "summary": "Listar todos os perfis",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de perfis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Perfil" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Profiles"],
+        "summary": "Criar novo perfil",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nome"],
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Perfil criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/perfis/{id}": {
+      "get": {
+        "tags": ["Profiles"],
+        "summary": "Buscar perfil por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do perfil",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Perfil" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Profiles"],
+        "summary": "Atualizar perfil",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nome"],
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Perfil atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Profiles"],
+        "summary": "Atualização parcial do perfil",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Perfil atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Profiles"],
+        "summary": "Remover perfil",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Perfil removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles": {
+      "get": {
+        "tags": ["Roles"],
+        "summary": "Listar todos os papéis",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de papéis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Role" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Roles"],
+        "summary": "Criar novo papel",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nome"],
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Papel criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles/{id}": {
+      "get": {
+        "tags": ["Roles"],
+        "summary": "Buscar papel por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do papel",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Role" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Roles"],
+        "summary": "Atualizar papel",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nome"],
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Papel atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Roles"],
+        "summary": "Atualização parcial do papel",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Papel atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Roles"],
+        "summary": "Remover papel",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Papel removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permissoes": {
+      "get": {
+        "tags": ["Permissions"],
+        "summary": "Listar todas as permissões",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de permissões",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Permissao" }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Permissions"],
+        "summary": "Criar nova permissão",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nome", "codigo"],
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" },
+                  "codigo": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Permissão criada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permissoes/{id}": {
+      "get": {
+        "tags": ["Permissions"],
+        "summary": "Buscar permissão por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da permissão",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Permissao" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Permissions"],
+        "summary": "Atualizar permissão",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nome", "codigo"],
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" },
+                  "codigo": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Permissão atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Permissions"],
+        "summary": "Atualização parcial da permissão",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nome": { "type": "string" },
+                  "descricao": { "type": "string" },
+                  "codigo": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Permissão atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Permissions"],
+        "summary": "Remover permissão",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Permissão removida",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auditoria": {
+      "get": {
+        "tags": ["Audit"],
+        "summary": "Listar logs de auditoria",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 10 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de logs de auditoria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/AuditoriaLog" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "limit": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auditoria/{id}": {
+      "get": {
+        "tags": ["Audit"],
+        "summary": "Buscar log de auditoria por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do log de auditoria",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuditoriaLog" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auditoria/usuario/{email}": {
+      "get": {
+        "tags": ["Audit"],
+        "summary": "Buscar logs de auditoria por usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "email",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 10 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de logs de auditoria do usuário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/AuditoriaLog" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "limit": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auditoria/acoes": {
+      "get": {
+        "tags": ["Audit"],
+        "summary": "Listar ações disponíveis",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de ações disponíveis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auditoria/tabelas": {
+      "get": {
+        "tags": ["Audit"],
+        "summary": "Listar tabelas afetadas",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de tabelas afetadas",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auditoria/estatisticas": {
+      "get": {
+        "tags": ["Audit"],
+        "summary": "Obter estatísticas de auditoria",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Estatísticas de auditoria",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total_logs": { "type": "integer" },
+                    "acoes_por_tipo": { "type": "object" },
+                    "tabelas_afetadas": { "type": "object" },
+                    "usuarios_ativos": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auditoria/limpar": {
+      "delete": {
+        "tags": ["Audit"],
+        "summary": "Limpar logs antigos",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "dias",
+            "in": "query",
+            "schema": { "type": "integer", "default": 30 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Logs removidos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": { "type": "string" },
+                    "logs_removidos": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/password-strength": {
+      "post": {
+        "tags": ["Security"],
+        "summary": "Verificar força da senha",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PasswordStrengthRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Resultado da verificação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PasswordStrengthResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comentarios": {
+      "post": {
+        "tags": ["Comments"],
+        "summary": "Criar novo comentário",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["conteudo", "tipo"],
+                "properties": {
+                  "conteudo": { "type": "string" },
+                  "tipo": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Comentário criado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "tags": ["Comments"],
+        "summary": "Listar todos os comentários",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de comentários",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "conteudo": { "type": "string" },
+                      "tipo": { "type": "string" },
+                      "created_at": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comentarios/{id}": {
+      "get": {
+        "tags": ["Comments"],
+        "summary": "Buscar comentário por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados do comentário",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "conteudo": { "type": "string" },
+                    "tipo": { "type": "string" },
+                    "created_at": { "type": "string", "format": "date-time" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Comments"],
+        "summary": "Atualizar comentário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["conteudo", "tipo"],
+                "properties": {
+                  "conteudo": { "type": "string" },
+                  "tipo": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Comentário atualizado",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Comments"],
+        "summary": "Remover comentário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comentário removido",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comentarios/tipo/{tipo}": {
+      "get": {
+        "tags": ["Comments"],
+        "summary": "Buscar comentários por tipo",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "tipo",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de comentários do tipo especificado",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "conteudo": { "type": "string" },
+                      "tipo": { "type": "string" },
+                      "created_at": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles-usuarios": {
+      "get": {
+        "tags": ["User Roles"],
+        "summary": "Listar todas as associações de roles com usuários",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de associações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "usuario_id": { "type": "integer" },
+                      "role_id": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles-usuarios/{id}": {
+      "get": {
+        "tags": ["User Roles"],
+        "summary": "Buscar associação de role com usuário por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da associação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "usuario_id": { "type": "integer" },
+                    "role_id": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["User Roles"],
+        "summary": "Criar nova associação de role com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["usuario_id", "role_id"],
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "role_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Associação criada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["User Roles"],
+        "summary": "Atualizar associação de role com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["usuario_id", "role_id"],
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "role_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["User Roles"],
+        "summary": "Atualização parcial da associação",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "role_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User Roles"],
+        "summary": "Remover associação de role com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Associação removida",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles-permissoes": {
+      "get": {
+        "tags": ["Role Permissions"],
+        "summary": "Listar todas as associações de roles com permissões",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de associações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "role_id": { "type": "integer" },
+                      "permissao_id": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/roles-permissoes/{id}": {
+      "get": {
+        "tags": ["Role Permissions"],
+        "summary": "Buscar associação de role com permissão por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da associação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "role_id": { "type": "integer" },
+                    "permissao_id": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["Role Permissions"],
+        "summary": "Criar nova associação de role com permissão",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["role_id", "permissao_id"],
+                "properties": {
+                  "role_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Associação criada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["Role Permissions"],
+        "summary": "Atualizar associação de role com permissão",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["role_id", "permissao_id"],
+                "properties": {
+                  "role_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["Role Permissions"],
+        "summary": "Atualização parcial da associação",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "role_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["Role Permissions"],
+        "summary": "Remover associação de role com permissão",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Associação removida",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permissoes-usuarios": {
+      "get": {
+        "tags": ["User Permissions"],
+        "summary": "Listar todas as associações de permissões com usuários",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de associações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "usuario_id": { "type": "integer" },
+                      "permissao_id": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/permissoes-usuarios/{id}": {
+      "get": {
+        "tags": ["User Permissions"],
+        "summary": "Buscar associação de permissão com usuário por ID",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Dados da associação",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "id": { "type": "integer" },
+                    "usuario_id": { "type": "integer" },
+                    "permissao_id": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": ["User Permissions"],
+        "summary": "Criar nova associação de permissão com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["usuario_id", "permissao_id"],
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Associação criada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": ["User Permissions"],
+        "summary": "Atualizar associação de permissão com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["usuario_id", "permissao_id"],
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "tags": ["User Permissions"],
+        "summary": "Atualização parcial da associação",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "usuario_id": { "type": "integer" },
+                  "permissao_id": { "type": "integer" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Associação atualizada",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": ["User Permissions"],
+        "summary": "Remover associação de permissão com usuário",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Associação removida",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/magic/verify": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Verificar magic link",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Magic link verificado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "token": { "type": "string" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "email": { "type": "string" },
+                        "is_active": { "type": "boolean" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/paginacao": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Listar módulos com paginação",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 10 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de módulos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Modulo" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "limit": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/buscar": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Buscar módulos por nome",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "nome",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de módulos encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Modulo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/contar": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Contar total de módulos",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Total de módulos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/ultimos": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Listar últimos módulos criados",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 5 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista dos últimos módulos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Modulo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/acessos-minimos": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Listar módulos com acessos mínimos",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "min_acessos",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de módulos com acessos mínimos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "nome": { "type": "string" },
+                      "acessos": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/resetar": {
+      "post": {
+        "tags": ["Modules"],
+        "summary": "Resetar contadores de acesso",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Contadores resetados",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notificacoes": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "Listar notificações do usuário",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de notificações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "mensagem": { "type": "string" },
+                      "tipo": { "type": "string" },
+                      "lida": { "type": "boolean" },
+                      "created_at": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notificacoes/{id}": {
+      "patch": {
+        "tags": ["Notifications"],
+        "summary": "Marcar notificação como lida",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notificação marcada como lida",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
