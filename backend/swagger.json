@@ -179,6 +179,51 @@
           "feedback": { "type": "string" },
           "is_strong": { "type": "boolean" }
         }
+      },
+      "Notificacao": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "mensagem": { "type": "string" },
+          "tipo": { "type": "string" },
+          "lida": { "type": "boolean" },
+          "created_at": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ModuloAcesso": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "nome": { "type": "string" },
+          "acessos": { "type": "integer" }
+        }
+      },
+      "PaginacaoResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/Modulo" }
+          },
+          "total": { "type": "integer" },
+          "page": { "type": "integer" },
+          "limit": { "type": "integer" }
+        }
+      },
+      "MagicLinkVerifyResponse": {
+        "type": "object",
+        "properties": {
+          "success": { "type": "boolean" },
+          "token": { "type": "string" },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "email": { "type": "string" },
+              "is_active": { "type": "boolean" }
+            }
+          }
+        }
       }
     }
   },
@@ -2208,6 +2253,267 @@
         "responses": {
           "200": {
             "description": "Associação removida",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/magic/verify": {
+      "get": {
+        "tags": ["Authentication"],
+        "summary": "Verificar magic link",
+        "parameters": [
+          {
+            "name": "token",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Magic link verificado com sucesso",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean" },
+                    "token": { "type": "string" },
+                    "user": {
+                      "type": "object",
+                      "properties": {
+                        "id": { "type": "integer" },
+                        "email": { "type": "string" },
+                        "is_active": { "type": "boolean" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/paginacao": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Listar módulos com paginação",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 10 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista paginada de módulos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/Modulo" }
+                    },
+                    "total": { "type": "integer" },
+                    "page": { "type": "integer" },
+                    "limit": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/buscar": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Buscar módulos por nome",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "nome",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de módulos encontrados",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Modulo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/contar": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Contar total de módulos",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Total de módulos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "total": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/ultimos": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Listar últimos módulos criados",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "schema": { "type": "integer", "default": 5 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista dos últimos módulos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Modulo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/acessos-minimos": {
+      "get": {
+        "tags": ["Modules"],
+        "summary": "Listar módulos com acessos mínimos",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "min_acessos",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Lista de módulos com acessos mínimos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "nome": { "type": "string" },
+                      "acessos": { "type": "integer" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/modulos/resetar": {
+      "post": {
+        "tags": ["Modules"],
+        "summary": "Resetar contadores de acesso",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Contadores resetados",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/SuccessMessage" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notificacoes": {
+      "get": {
+        "tags": ["Notifications"],
+        "summary": "Listar notificações do usuário",
+        "security": [{ "bearerAuth": [] }],
+        "responses": {
+          "200": {
+            "description": "Lista de notificações",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "integer" },
+                      "mensagem": { "type": "string" },
+                      "tipo": { "type": "string" },
+                      "lida": { "type": "boolean" },
+                      "created_at": { "type": "string", "format": "date-time" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/notificacoes/{id}": {
+      "patch": {
+        "tags": ["Notifications"],
+        "summary": "Marcar notificação como lida",
+        "security": [{ "bearerAuth": [] }],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Notificação marcada como lida",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/SuccessMessage" }
