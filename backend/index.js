@@ -10,6 +10,7 @@ import rolesRoutes from "./src/roles/route.js";
 import permissoesRoutes from "./src/permissoes/route.js";
 import auditoriaRoutes from "./src/auditoria/route.js";
 import comentariosRoutes from "./src/comentarios/route.js";
+import errorHandler from "./src/middlewares/errorHandler.js";
 
 const app = express();
 const port = 3000;
@@ -25,6 +26,9 @@ app.use("/roles", rolesRoutes);
 app.use("/permissoes", permissoesRoutes);
 app.use("/auditoria", auditoriaRoutes);
 app.use("/comentarios", comentariosRoutes);
+
+// error handler
+app.use(errorHandler);
 
 // Swagger
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
