@@ -78,7 +78,6 @@ const generateMagicLinkTemplate = (magicLink, userEmail, tokenJwt) => `
         ⏰ <strong>Importante:</strong> Este link expira em <strong>15 minutos</strong> por segurança.
       </p>
     </div>
-    
     <div style="border-top: 1px solid #ecf0f1; padding-top: 20px; margin-top: 30px;">
       <div style="background-color: #f0f0f0; padding: 12px 20px; border-radius: 6px; margin-bottom: 15px;">
         <p style="margin: 0; font-size: 14px; color: #555; word-break: break-all;">

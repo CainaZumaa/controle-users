@@ -1,5 +1,6 @@
 // @ts-nocheck
 import express from "express";
+import cors from "cors";
 import { swaggerDocument, swaggerUi } from "./swagger.js";
 import usuarioRoutes from "./src/usuario/route.js";
 import authRoutes from "./src/auth/auth.routes.js";
@@ -14,6 +15,16 @@ import errorHandler from "./src/middlewares/errorHandler.js";
 
 const app = express();
 const port = 3000;
+
+// CORS configuration
+app.use(
+  cors({
+    origin: ["http://localhost:3000", "http://localhost:5000"], // Portas
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
+    allowedHeaders: ["Content-Type", "Authorization"],
+    credentials: true, // Permitir credenciais (cookies, authorization headers, etc..)
+  })
+);
 
 app.use(express.json());
 
