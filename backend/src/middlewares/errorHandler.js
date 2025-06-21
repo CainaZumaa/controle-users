@@ -1,16 +1,31 @@
+// @ts-nocheck
+import { AppError } from "../utils/errors.js";
+
 const errorHandler = (err, req, res, next) => {
   console.error("Erro:", {
+    name: err.name,
     message: err.message,
+    statusCode: err.statusCode,
     stack: err.stack,
     path: req.path,
     method: req.method,
   });
 
+  // Se já é um erro customizado da aplicação
+  if (err instanceof AppError) {
+    return res.status(err.statusCode).json({
+      error: err.name,
+      message: err.message,
+      ...(err.details && { details: err.details }),
+    });
+  }
+
   // Erros de validação
-  if (err.name === "ValidationError") {
+  if (err.name === "ValidationError" || err.name === "ValidatorError") {
     return res.status(400).json({
       error: "Erro de validação",
-      details: err.message,
+      message: err.message,
+      ...(err.details && { details: err.details }),
     });
   }
 
@@ -23,20 +38,58 @@ const errorHandler = (err, req, res, next) => {
   }
 
   // Erros de não encontrado
-  if (err.name === "NotFoundError") {
+  if (err.name === "NotFoundError" || err.code === "ENOTFOUND") {
     return res.status(404).json({
       error: "Não encontrado",
-      message: err.message,
+      message: err.message || "Recurso não encontrado",
     });
   }
 
-  // Erros de banco de dados
-  if (err.code === "23505") {
-    // Código de erro de chave única violada no Postgres
-    return res.status(409).json({
-      error: "Conflito",
-      message: "Registro já existe",
-    });
+  // Erros de banco de dados - PostgreSQL
+  if (err.code) {
+    switch (err.code) {
+      case "23505": // Violação de chave única
+        return res.status(409).json({
+          error: "Conflito",
+          message: "Registro já existe",
+        });
+
+      case "23503": // Violação de chave estrangeira
+        return res.status(400).json({
+          error: "Referência inválida",
+          message: "Dados referenciados não existem",
+        });
+
+      case "23514": // Violação de constraint
+        return res.status(400).json({
+          error: "Dados inválidos",
+          message: "Dados não atendem às regras de validação",
+        });
+
+      case "42P01": // Tabela não existe
+        return res.status(500).json({
+          error: "Erro de configuração",
+          message: "Tabela não encontrada",
+        });
+
+      case "42703": // Coluna não existe
+        return res.status(500).json({
+          error: "Erro de configuração",
+          message: "Coluna não encontrada",
+        });
+
+      case "ECONNREFUSED": // Conexão recusada
+        return res.status(503).json({
+          error: "Serviço indisponível",
+          message: "Banco de dados não está disponível",
+        });
+
+      case "ENOTFOUND": // Host não encontrado
+        return res.status(503).json({
+          error: "Serviço indisponível",
+          message: "Não foi possível conectar ao banco de dados",
+        });
+    }
   }
 
   // Erro genérico para outros casos
@@ -46,6 +99,7 @@ const errorHandler = (err, req, res, next) => {
       process.env.NODE_ENV === "development"
         ? err.message
         : "Ocorreu um erro inesperado",
+    ...(process.env.NODE_ENV === "development" && { stack: err.stack }),
   });
 };
 

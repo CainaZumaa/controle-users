@@ -42,7 +42,13 @@ app.use("/comentarios", comentariosRoutes);
 app.use(errorHandler);
 
 // Swagger
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+app.use(
+  "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument, {
+    docExpansion: "none",
+  })
+);
 app.listen(port, () => {
   console.log(`\n🚀 Servidor rodando com sucesso em http://localhost:${port}`);
   console.log(`\n--------------------------------------------------`);

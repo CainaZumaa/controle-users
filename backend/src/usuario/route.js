@@ -1,11 +1,16 @@
 import express from "express";
 import { authMiddleware } from "../middlewares/auth.js";
-import { 
-  auditCreate, 
-  auditRead, 
-  auditUpdate, 
-  auditDelete 
+import {
+  auditCreate,
+  auditRead,
+  auditUpdate,
+  auditDelete,
 } from "../middlewares/auditoria.js";
+import {
+  validateCreateUsuario,
+  validateUpdateUsuario,
+  validateId,
+} from "../middlewares/validationMiddleware.js";
 import {
   getAllUsuarios,
   getUsuario,
@@ -18,36 +23,41 @@ import {
 const router = express.Router();
 
 // Rotas Públicas
-router.post("/", auditCreate('usuarios'), createUsuario);
+router.post("/", validateCreateUsuario, auditCreate("usuarios"), createUsuario);
 
 // Rotas Privadas (protegidas)
-router.get("/:id", 
-  authMiddleware, 
-  auditRead('usuarios'), 
+router.get(
+  "/:id",
+  validateId,
+  authMiddleware,
+  auditRead("usuarios"),
   getUsuario
 );
 
-router.get("/", 
-  authMiddleware, 
-  auditRead('usuarios'), 
-  getAllUsuarios
-);
+router.get("/", authMiddleware, auditRead("usuarios"), getAllUsuarios);
 
-router.put("/:id", 
-  authMiddleware, 
-  auditUpdate('usuarios'), 
+router.put(
+  "/:id",
+  validateId,
+  validateUpdateUsuario,
+  authMiddleware,
+  auditUpdate("usuarios"),
   updateUsuario
 );
 
-router.patch("/:id", 
-  authMiddleware, 
-  auditUpdate('usuarios'), 
+router.patch(
+  "/:id",
+  validateId,
+  authMiddleware,
+  auditUpdate("usuarios"),
   patchUsuario
 );
 
-router.delete("/:id", 
-  authMiddleware, 
-  auditDelete('usuarios'), 
+router.delete(
+  "/:id",
+  validateId,
+  authMiddleware,
+  auditDelete("usuarios"),
   deleteUsuario
 );
 
