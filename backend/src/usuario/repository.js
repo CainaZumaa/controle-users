@@ -7,6 +7,7 @@ export const create = async (dados) => {
     nome: dados.nome,
     email: dados.email,
     senha: dados.senha,
+    foto_perfil: dados.foto_perfil,
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 
@@ -20,6 +21,7 @@ export const findAll = async () => {
     id: usuario.id,
     nome: usuario.nome,
     email: usuario.email,
+    foto_perfil: usuario.foto_perfil,
   }));
 };
 
@@ -42,6 +44,7 @@ export const update = async (id, dados) => {
     nome: dados.nome,
     email: dados.email,
     senha: dados.senha,
+    foto_perfil: dados.foto_perfil,
   };
 
   const result = await db(tabela)
@@ -59,6 +62,7 @@ export const patch = async (id, dados) => {
   const dadosMapeados = {
     nome: dados.nome,
     email: dados.email,
+    foto_perfil: dados.foto_perfil,
   };
 
   const result = await db(tabela)
