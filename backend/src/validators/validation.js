@@ -24,7 +24,7 @@ export class Validation {
       return { isValid: false, error: this.getEmailError(formattedEmail) };
     }
 
-    return { isValid: true, value: formattedEmail.toLowerCase() };
+    return { isValid: true, value: formattedEmail };
   }
 
   static getEmailError(email) {

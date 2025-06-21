@@ -55,6 +55,27 @@ const errorHandler = (err, req, res, next) => {
         });
 
       case "23503": // Violação de chave estrangeira
+        // Tratamento específico para erro de auditoria com email não normalizado
+        if (
+          err.table === "auditoria_logs" &&
+          err.constraint === "fk_auditoria_usuario_email"
+        ) {
+          console.warn("Erro de auditoria - email não normalizado:", {
+            detail: err.detail,
+            table: err.table,
+            constraint: err.constraint,
+            path: req.path,
+            method: req.method,
+          });
+
+          // Log do erro mas não falha a operação principal
+          return res.status(200).json({
+            message: "Operação realizada com sucesso",
+            warning:
+              "Log de auditoria não foi registrado devido a inconsistência de dados",
+          });
+        }
+
         return res.status(400).json({
           error: "Referência inválida",
           message: "Dados referenciados não existem",

@@ -22,7 +22,7 @@ export const sendMagicLinkEmail = async (email, magicToken, tokenJwt) => {
     to: email,
     subject: "🔐 Seu Link de Acesso Rápido",
     html: generateMagicLinkTemplate(magicLink, email, tokenJwt),
-    text: `Clique no link para acessar sua conta: ${magicLink}\n\nToken JWT (apenas dev): ${tokenJwt}`,
+    text: `Clique no link para acessar sua conta: ${magicLink}`,
   };
 
   try {
@@ -78,13 +78,8 @@ const generateMagicLinkTemplate = (magicLink, userEmail, tokenJwt) => `
         ⏰ <strong>Importante:</strong> Este link expira em <strong>15 minutos</strong> por segurança.
       </p>
     </div>
+    
     <div style="border-top: 1px solid #ecf0f1; padding-top: 20px; margin-top: 30px;">
-      <div style="background-color: #f0f0f0; padding: 12px 20px; border-radius: 6px; margin-bottom: 15px;">
-        <p style="margin: 0; font-size: 14px; color: #555; word-break: break-all;">
-          🔑 <strong>Seu JWT Token:</strong> (apenas em dev)<br>
-          <code style="background: #e8e8e8; padding: 4px 8px; border-radius: 4px; font-family: 'Courier New', monospace; font-size: 12px;">${tokenJwt}</code>
-        </p>
-      </div>
       <p style="color: #95a5a6; font-size: 13px; text-align: center; margin: 0;">
         Se você não solicitou este acesso, pode ignorar este email com segurança.<br>
         Este link só funciona uma vez e expira automaticamente.
