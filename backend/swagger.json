@@ -252,7 +252,7 @@
         }
       }
     },
-    "/login": {
+    "/auth/login": {
       "post": {
         "tags": ["Authentication"],
         "summary": "Login do usuário",
