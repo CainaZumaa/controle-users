@@ -3,7 +3,7 @@
 
   "builds": [
     {
-      "src": "index.js",
+      "src": "backend/index.js",
 
       "use": "@vercel/node"
     }
@@ -13,7 +13,7 @@
     {
       "src": "/(.*)",
 
-      "dest": "/index.js"
+      "dest": "/backend/index.js"
     }
   ],
 
@@ -22,8 +22,8 @@
   },
 
   "functions": {
-    "backend/index.js": {
-      "includeFiles": "backend/**"
+    "index.js": {
+      "includeFiles": ["backend/swagger.json", "backend/src/**/*"]
     }
   }
 }
