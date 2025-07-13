@@ -22,8 +22,8 @@
   },
 
   "functions": {
-    "index.js": {
-      "includeFiles": ["backend/swagger.json", "backend/src/**/*"]
+    "backend/index.js": {
+      "includeFiles": "backend/**"
     }
   }
 }
