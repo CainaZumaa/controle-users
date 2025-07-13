@@ -17,7 +17,7 @@
   },
   "functions": {
     "index.js": {
-      "includeFiles": ["swagger.json"]
+      "includeFiles": ["swagger.json", "swagger-inline.js", "src/**/*"]
     }
   }
 }
