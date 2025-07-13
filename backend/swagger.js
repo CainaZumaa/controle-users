@@ -1,41 +1,47 @@
 // @ts-nocheck
 import swaggerUi from "swagger-ui-express";
 import { readFileSync } from "fs";
-import { join } from "path";
+import { fileURLToPath } from "url";
+import { dirname, join } from "path";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+const swaggerFilePath = join(__dirname, "swagger.json");
+
+console.log("🔍 Debug - Caminho do arquivo:", swaggerFilePath);
+console.log("🔍 Debug - Diretório atual:", __dirname);
+console.log("🔍 Debug - Process CWD:", process.cwd());
 
 let swaggerDocument;
 
-// Função para tentar carregar o arquivo swagger.json
-function loadSwaggerFile() {
-  const paths = [
-    "./swagger.json",
-    "../swagger.json",
-    join(process.cwd(), "swagger.json"),
-    join(process.cwd(), "..", "swagger.json"),
-  ];
+const possiblePaths = [
+  swaggerFilePath,
+  join(process.cwd(), "swagger.json"),
+  "./swagger.json",
+  "../swagger.json",
+];
 
-  for (const path of paths) {
-    try {
-      console.log(`🔍 Tentando carregar: ${path}`);
-      const content = readFileSync(path, "utf8");
-      const parsed = JSON.parse(content);
-      console.log(`✅ Arquivo carregado com sucesso: ${path}`);
-      return parsed;
-    } catch (error) {
-      console.log(`❌ Erro ao carregar ${path}:`, error.message);
-      // Continua para o próximo caminho
-    }
+let fileFound = false;
+
+for (const path of possiblePaths) {
+  try {
+    console.log(`🔍 Tentando carregar: ${path}`);
+    swaggerDocument = JSON.parse(readFileSync(path, "utf8"));
+    console.log(`✅ swagger.json carregado com sucesso de: ${path}`);
+    fileFound = true;
+    break;
+  } catch (error) {
+    console.log(`❌ Erro ao carregar ${path}:`, error.message);
+    // Continua para o próximo caminho
   }
-  return null;
 }
 
-// Tentar carregar o arquivo primeiro
-swaggerDocument = loadSwaggerFile();
+if (!fileFound) {
+  console.error("❌ Não foi possível carregar swagger.json de nenhum caminho");
+  console.log("📝 Usando configuração inline do Swagger como fallback");
 
-// Se não conseguir carregar, usar configuração inline
-if (!swaggerDocument) {
-  console.log("📝 Usando configuração inline do Swagger");
-
+  // Fallback: configuração inline do Swagger
   swaggerDocument = {
     openapi: "3.0.0",
     info: {
@@ -98,8 +104,7 @@ if (!swaggerDocument) {
       },
     },
   };
-} else {
-  console.log("📄 Arquivo swagger.json carregado com sucesso");
 }
 
+// Exportar o documento (seja o carregado ou o fallback)
 export { swaggerDocument, swaggerUi };
