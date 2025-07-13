@@ -1,27 +1,29 @@
 {
   "version": 2,
+
   "builds": [
     {
-      "src": "backend/index.js",
+      "src": "index.js",
+
       "use": "@vercel/node"
     }
   ],
+
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/backend/index.js"
+
+      "dest": "/index.js"
     }
   ],
+
   "env": {
     "NODE_ENV": "production"
   },
+
   "functions": {
-    "backend/index.js": {
-      "includeFiles": [
-        "backend/swagger.json",
-        "backend/swagger-inline.js",
-        "backend/src/**"
-      ]
+    "index.js": {
+      "includeFiles": ["backend/swagger.json", "backend/src/**/*"]
     }
   }
 }
