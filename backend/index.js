@@ -84,9 +84,6 @@ if (process.env.NODE_ENV !== "production") {
     console.log(`  ➡️  GET  /usuarios?page=1&limit=10`);
     console.log(`  ➡️  GET  /usuarios?search=joão&status=true`);
     console.log(`  ➡️  GET  /usuarios?orderBy=created_at&orderDirection=desc`);
-    console.log(
-      `  ➡️  GET  /usuarios?dataInicio=2024-01-01&dataFim=2024-12-31`
-    );
     console.log(`\n📄 Documentação:`);
     console.log(`  ➡️  GET  /api-docs (Swagger)`);
     console.log(`--------------------------------------------------\n`);
