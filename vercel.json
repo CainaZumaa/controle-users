@@ -17,11 +17,7 @@
   },
   "functions": {
     "backend/index.js": {
-      "includeFiles": [
-        "backend/swagger.json",
-        "backend/swagger-inline.js",
-        "backend/src/**/*"
-      ]
+      "includeFiles": "backend/**"
     }
   }
 }
