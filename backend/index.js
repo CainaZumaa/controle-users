@@ -58,36 +58,32 @@ app.use(
     docExpansion: "none",
   })
 );
-
-if (process.env.NODE_ENV !== "production") {
-  app.listen(port, () => {
-    console.log(
-      `\n🚀 Servidor rodando com sucesso em http://localhost:${port}`
-    );
-    console.log(`\n--------------------------------------------------`);
-    console.log(`📜 Rotas Principais:`);
-    console.log(`--------------------------------------------------`);
-    console.log(`🔑 Autenticação:`);
-    console.log(`  ➡️  POST /auth/login`);
-    console.log(`  ➡️  POST /auth/validate`);
-    console.log(`  ➡️  POST /auth/check`);
-    console.log(`  ➡️  POST /auth/magic`);
-    console.log(`\n👤 Usuários:`);
-    console.log(`  ➡️  POST /usuarios (criar usuário)`);
-    console.log(`  ➡️  GET  /usuarios (listar com filtros)`);
-    console.log(`  ➡️  GET  /usuarios/all (listar todos - legado)`);
-    console.log(`  ➡️  GET  /usuarios/:id`);
-    console.log(`  ➡️  PUT  /usuarios/:id`);
-    console.log(`  ➡️  PATCH /usuarios/:id`);
-    console.log(`  ➡️  DELETE /usuarios/:id`);
-    console.log(`\n🔍 Filtros de Usuários:`);
-    console.log(`  ➡️  GET  /usuarios?page=1&limit=10`);
-    console.log(`  ➡️  GET  /usuarios?search=joão&status=true`);
-    console.log(`  ➡️  GET  /usuarios?orderBy=created_at&orderDirection=desc`);
-    console.log(`\n📄 Documentação:`);
-    console.log(`  ➡️  GET  /api-docs (Swagger)`);
-    console.log(`--------------------------------------------------\n`);
-  });
-}
+app.listen(port, () => {
+  console.log(`\n🚀 Servidor rodando com sucesso em http://localhost:${port}`);
+  console.log(`\n--------------------------------------------------`);
+  console.log(`📜 Rotas Principais:`);
+  console.log(`--------------------------------------------------`);
+  console.log(`🔑 Autenticação:`);
+  console.log(`  ➡️  POST /auth/login`);
+  console.log(`  ➡️  POST /auth/validate`);
+  console.log(`  ➡️  POST /auth/check`);
+  console.log(`  ➡️  POST /auth/magic`);
+  console.log(`\n👤 Usuários:`);
+  console.log(`  ➡️  POST /usuarios (criar usuário)`);
+  console.log(`  ➡️  GET  /usuarios (listar com filtros)`);
+  console.log(`  ➡️  GET  /usuarios/all (listar todos - legado)`);
+  console.log(`  ➡️  GET  /usuarios/:id`);
+  console.log(`  ➡️  PUT  /usuarios/:id`);
+  console.log(`  ➡️  PATCH /usuarios/:id`);
+  console.log(`  ➡️  DELETE /usuarios/:id`);
+  console.log(`\n🔍 Filtros de Usuários:`);
+  console.log(`  ➡️  GET  /usuarios?page=1&limit=10`);
+  console.log(`  ➡️  GET  /usuarios?search=joão&status=true`);
+  console.log(`  ➡️  GET  /usuarios?orderBy=created_at&orderDirection=desc`);
+  console.log(`  ➡️  GET  /usuarios?dataInicio=2024-01-01&dataFim=2024-12-31`);
+  console.log(`\n📄 Documentação:`);
+  console.log(`  ➡️  GET  /api-docs (Swagger)`);
+  console.log(`--------------------------------------------------\n`);
+});
 
 export default app;
