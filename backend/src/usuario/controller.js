@@ -61,11 +61,14 @@ export const createUsuario = async (req, res, next) => {
       throwConflict("Email já está em uso.");
     }
 
-    const novoUsuario = await usuariosService.create({
+    const novoUsuarioArr = await usuariosService.create({
       nome,
       email,
       senha,
     });
+    const novoUsuario = Array.isArray(novoUsuarioArr)
+      ? novoUsuarioArr[0]
+      : novoUsuarioArr;
 
     try {
       await sendWelcomeEmail(email, nome);
@@ -76,7 +79,21 @@ export const createUsuario = async (req, res, next) => {
       );
     }
 
-    res.status(201).json({ message: "Usuário criado com sucesso" });
+    if (novoUsuario && novoUsuario.senha) {
+      delete novoUsuario.senha;
+    }
+
+    res.status(201).json({
+      data: {
+        id: novoUsuario.id,
+        nome: novoUsuario.nome,
+        email: novoUsuario.email,
+        is_active: novoUsuario.is_active,
+        created_at: novoUsuario.created_at,
+        last_login: novoUsuario.last_login,
+      },
+      message: "Usuário criado com sucesso",
+    });
   } catch (error) {
     next(error);
   }
