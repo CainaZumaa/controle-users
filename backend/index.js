@@ -14,17 +14,12 @@ import comentariosRoutes from "./src/comentarios/route.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
 
 const app = express();
-const port = process.env.PORT || 3000;
+const port = 3000;
 
 // CORS configuration
 app.use(
   cors({
-    origin: [
-      "http://localhost:3000",
-      "http://localhost:5000",
-      "https://controle-users.vercel.app",
-      "https://controle-users-front.vercel.app",
-    ],
+    origin: ["http://localhost:3000", "http://localhost:5000"], // Portas
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH", "OPTIONS"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true, // Permitir credenciais (cookies, authorization headers, etc..)
@@ -32,20 +27,6 @@ app.use(
 );
 
 app.use(express.json());
-
-// Rota de teste para verificar se a API está funcionando
-app.get("/", (req, res) => {
-  res.json({
-    message: "API de Gerenciamento de Usuários funcionando!",
-    version: "1.0.0",
-    endpoints: {
-      auth: "/auth",
-      usuarios: "/usuarios",
-      passwordCheck: "/password-strength",
-      docs: "/api-docs",
-    },
-  });
-});
 
 app.use("/auth", authRoutes);
 app.use("/usuarios", usuarioRoutes);
@@ -68,40 +49,30 @@ app.use(
     docExpansion: "none",
   })
 );
-
-// Apenas iniciar o servidor se não estiver no ambiente do Vercel
-if (process.env.NODE_ENV !== "production") {
-  app.listen(port, () => {
-    console.log(
-      `\n🚀 Servidor rodando com sucesso em http://localhost:${port}`
-    );
-    console.log(`\n--------------------------------------------------`);
-    console.log(`📜 Rotas Principais:`);
-    console.log(`--------------------------------------------------`);
-    console.log(`🔑 Autenticação:`);
-    console.log(`  ➡️  POST /auth/login`);
-    console.log(`  ➡️  POST /auth/validate`);
-    console.log(`  ➡️  POST /auth/check`);
-    console.log(`  ➡️  POST /auth/magic`);
-    console.log(`\n👤 Usuários:`);
-    console.log(`  ➡️  POST /usuarios (criar usuário)`);
-    console.log(`  ➡️  GET  /usuarios (listar com filtros)`);
-    console.log(`  ➡️  GET  /usuarios/all (listar todos - legado)`);
-    console.log(`  ➡️  GET  /usuarios/:id`);
-    console.log(`  ➡️  PUT  /usuarios/:id`);
-    console.log(`  ➡️  PATCH /usuarios/:id`);
-    console.log(`  ➡️  DELETE /usuarios/:id`);
-    console.log(`\n🔍 Filtros de Usuários:`);
-    console.log(`  ➡️  GET  /usuarios?page=1&limit=10`);
-    console.log(`  ➡️  GET  /usuarios?search=joão&status=true`);
-    console.log(`  ➡️  GET  /usuarios?orderBy=created_at&orderDirection=desc`);
-    console.log(
-      `  ➡️  GET  /usuarios?dataInicio=2024-01-01&dataFim=2024-12-31`
-    );
-    console.log(`\n📄 Documentação:`);
-    console.log(`  ➡️  GET  /api-docs (Swagger)`);
-    console.log(`--------------------------------------------------\n`);
-  });
-}
-
-export default app;
+app.listen(port, () => {
+  console.log(`\n🚀 Servidor rodando com sucesso em http://localhost:${port}`);
+  console.log(`\n--------------------------------------------------`);
+  console.log(`📜 Rotas Principais:`);
+  console.log(`--------------------------------------------------`);
+  console.log(`🔑 Autenticação:`);
+  console.log(`  ➡️  POST /auth/login`);
+  console.log(`  ➡️  POST /auth/validate`);
+  console.log(`  ➡️  POST /auth/check`);
+  console.log(`  ➡️  POST /auth/magic`);
+  console.log(`\n👤 Usuários:`);
+  console.log(`  ➡️  POST /usuarios (criar usuário)`);
+  console.log(`  ➡️  GET  /usuarios (listar com filtros)`);
+  console.log(`  ➡️  GET  /usuarios/all (listar todos - legado)`);
+  console.log(`  ➡️  GET  /usuarios/:id`);
+  console.log(`  ➡️  PUT  /usuarios/:id`);
+  console.log(`  ➡️  PATCH /usuarios/:id`);
+  console.log(`  ➡️  DELETE /usuarios/:id`);
+  console.log(`\n🔍 Filtros de Usuários:`);
+  console.log(`  ➡️  GET  /usuarios?page=1&limit=10`);
+  console.log(`  ➡️  GET  /usuarios?search=joão&status=true`);
+  console.log(`  ➡️  GET  /usuarios?orderBy=created_at&orderDirection=desc`);
+  console.log(`  ➡️  GET  /usuarios?dataInicio=2024-01-01&dataFim=2024-12-31`);
+  console.log(`\n📄 Documentação:`);
+  console.log(`  ➡️  GET  /api-docs (Swagger)`);
+  console.log(`--------------------------------------------------\n`);
+});
