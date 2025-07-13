@@ -8,9 +8,7 @@ export const auditMiddleware = (tabela, operacao = "auto") => {
   return async (req, res, next) => {
     if (["PUT", "PATCH", "DELETE"].includes(req.method) && req.params.id) {
       try {
-        const dbConnection = await db;
-        const dadosOriginais = await dbConnection
-          .default(tabela)
+        const dadosOriginais = await db(tabela)
           .where("id", req.params.id)
           .first();
         req.dadosOriginais = dadosOriginais;

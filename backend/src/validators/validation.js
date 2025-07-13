@@ -188,19 +188,11 @@ export class Validation {
       }
     }
 
-    if (data.senha !== undefined) {
-      const passwordValidation = this.validatePassword(data.senha);
-      if (!passwordValidation.isValid) {
-        if (passwordValidation.details) {
-          return {
-            isValid: false,
-            error: passwordValidation.error,
-            details: passwordValidation.details,
-          };
-        }
-        errors.push(passwordValidation.error);
+    if (data.is_active !== undefined) {
+      if (typeof data.is_active !== "boolean") {
+        errors.push("Status deve ser true ou false");
       } else {
-        validatedData.senha = passwordValidation.value;
+        validatedData.is_active = data.is_active;
       }
     }
 

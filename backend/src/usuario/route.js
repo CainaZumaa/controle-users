@@ -10,9 +10,11 @@ import {
   validateCreateUsuario,
   validateUpdateUsuario,
   validateId,
+  validateUserFilters,
 } from "../middlewares/validationMiddleware.js";
 import {
   getAllUsuarios,
+  getAllUsuariosWithFilters,
   getUsuario,
   createUsuario,
   updateUsuario,
@@ -34,7 +36,17 @@ router.get(
   getUsuario
 );
 
-router.get("/", authMiddleware, auditRead("usuarios"), getAllUsuarios);
+// Nova rota para listar usuários com filtros e paginação
+router.get(
+  "/",
+  validateUserFilters,
+  authMiddleware,
+  auditRead("usuarios"),
+  getAllUsuariosWithFilters
+);
+
+// Rota antiga mantida para compatibilidade (será removida em versão futura)
+router.get("/all", authMiddleware, auditRead("usuarios"), getAllUsuarios);
 
 router.put(
   "/:id",

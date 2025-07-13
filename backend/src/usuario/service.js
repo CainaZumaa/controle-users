@@ -24,6 +24,10 @@ export const usuariosService = {
     return await repository_usuarios.findAll();
   },
 
+  async findAllWithFilters(filtros = {}) {
+    return await repository_usuarios.findAllWithFilters(filtros);
+  },
+
   async findOne(id) {
     const usuario = await repository_usuarios.findOne(id);
     if (!usuario) throw new Error("Usuário não encontrado");
@@ -31,14 +35,12 @@ export const usuariosService = {
   },
 
   async update(id, dados) {
-    Usuario.validate(dados);
     const usuarioExistente = await repository_usuarios.findOne(id);
     if (!usuarioExistente) throw new Error("Usuário não encontrado");
     await repository_usuarios.update(id, dados);
   },
 
   async patch(id, dados) {
-    Usuario.validate(dados);
     const usuarioExistente = await repository_usuarios.findOne(id);
     if (!usuarioExistente) throw new Error("Usuário não encontrado");
     await repository_usuarios.patch(id, dados);

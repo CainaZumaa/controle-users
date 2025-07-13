@@ -12,6 +12,31 @@ export const getAllUsuarios = async (_, res, next) => {
   }
 };
 
+export const getAllUsuariosWithFilters = async (req, res, next) => {
+  try {
+    // Usar dados já validados pelo middleware
+    const filtros = req.validatedFilters;
+
+    const resultado = await usuariosService.findAllWithFilters(filtros);
+
+    res.status(200).json({
+      success: true,
+      data: resultado.usuarios,
+      pagination: resultado.pagination,
+      filters: {
+        search: filtros.search || null,
+        status: filtros.status,
+        orderBy: filtros.orderBy,
+        orderDirection: filtros.orderDirection,
+        dataInicio: filtros.dataInicio || null,
+        dataFim: filtros.dataFim || null,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getUsuario = async (req, res, next) => {
   try {
     const { id } = req.params;

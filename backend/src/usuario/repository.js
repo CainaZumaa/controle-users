@@ -7,7 +7,6 @@ export const create = async (dados) => {
     nome: dados.nome,
     email: dados.email,
     senha: dados.senha,
-    foto_perfil: dados.foto_perfil,
   };
   const result = await db(tabela).insert(dadosMapeados).returning("*");
 
@@ -21,8 +20,91 @@ export const findAll = async () => {
     id: usuario.id,
     nome: usuario.nome,
     email: usuario.email,
-    foto_perfil: usuario.foto_perfil,
+    is_active: usuario.is_active,
+    created_at: usuario.created_at,
+    last_login: usuario.last_login,
   }));
+};
+
+// Novo método para paginação e filtros
+export const findAllWithFilters = async (filtros = {}) => {
+  const {
+    page = 1,
+    limit = 10,
+    search = "",
+    status = null,
+    orderBy = "nome",
+    orderDirection = "asc",
+    dataInicio = null,
+    dataFim = null,
+  } = filtros;
+
+  const offset = (page - 1) * limit;
+
+  // Construir condições de filtro
+  const whereConditions = {};
+
+  if (status !== null && status !== undefined) {
+    whereConditions.is_active = status;
+  }
+
+  // Query base para aplicar filtros
+  let baseQuery = db(tabela);
+
+  // Aplicar filtros de busca
+  if (search) {
+    baseQuery = baseQuery.where(function () {
+      this.where("nome", "ilike", `%${search}%`).orWhere(
+        "email",
+        "ilike",
+        `%${search}%`
+      );
+    });
+  }
+
+  // Aplicar filtros de status
+  if (Object.keys(whereConditions).length > 0) {
+    baseQuery = baseQuery.where(whereConditions);
+  }
+
+  // Aplicar filtros de data
+  if (dataInicio) {
+    baseQuery = baseQuery.where("created_at", ">=", dataInicio);
+  }
+
+  if (dataFim) {
+    baseQuery = baseQuery.where("created_at", "<=", dataFim);
+  }
+
+  // Contar total de registros (query separada)
+  const countResult = await baseQuery.clone().count("* as total").first();
+  const totalCount = parseInt(countResult.total);
+
+  // Buscar dados com ordenação e paginação
+  const usuarios = await baseQuery
+    .select("*")
+    .orderBy(orderBy, orderDirection)
+    .limit(limit)
+    .offset(offset);
+
+  return {
+    usuarios: usuarios.map((usuario) => ({
+      id: usuario.id,
+      nome: usuario.nome,
+      email: usuario.email,
+      is_active: usuario.is_active,
+      created_at: usuario.created_at,
+      last_login: usuario.last_login,
+    })),
+    pagination: {
+      page: parseInt(page),
+      limit: parseInt(limit),
+      total: totalCount,
+      totalPages: Math.ceil(totalCount / limit),
+      hasNext: page * limit < totalCount,
+      hasPrev: page > 1,
+    },
+  };
 };
 
 export const findOne = async (id) => {
@@ -43,8 +125,7 @@ export const update = async (id, dados) => {
   const dadosMapeados = {
     nome: dados.nome,
     email: dados.email,
-    senha: dados.senha,
-    foto_perfil: dados.foto_perfil,
+    is_active: dados.is_active,
   };
 
   const result = await db(tabela)
@@ -62,7 +143,7 @@ export const patch = async (id, dados) => {
   const dadosMapeados = {
     nome: dados.nome,
     email: dados.email,
-    foto_perfil: dados.foto_perfil,
+    is_active: dados.is_active,
   };
 
   const result = await db(tabela)
@@ -108,6 +189,7 @@ export const blockInactiveUsers = async () => {
 export const repository_usuarios = {
   create,
   findAll,
+  findAllWithFilters,
   findOne,
   findByEmail,
   update,
