@@ -28,6 +28,15 @@ app.use(
 
 app.use(express.json());
 
+// ROTA VERCEL 🃏
+app.get("/", (req, res) => {
+  res.json({
+    status: "ok",
+    message: "API de Gerenciamento de Usuários funcionando!",
+    version: "1.0.0",
+  });
+});
+
 app.use("/auth", authRoutes);
 app.use("/usuarios", usuarioRoutes);
 app.use("/", passwordRoutes);
