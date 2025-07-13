@@ -16,8 +16,12 @@
     "NODE_ENV": "production"
   },
   "functions": {
-    "index.js": {
-      "includeFiles": ["swagger.json", "swagger-inline.js", "src/**/*"]
+    "backend/index.js": {
+      "includeFiles": [
+        "backend/swagger.json",
+        "backend/swagger-inline.js",
+        "backend/src/**/*"
+      ]
     }
   }
 }
