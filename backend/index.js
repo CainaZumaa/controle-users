@@ -12,9 +12,11 @@ import permissoesRoutes from "./src/permissoes/route.js";
 import auditoriaRoutes from "./src/auditoria/route.js";
 import comentariosRoutes from "./src/comentarios/route.js";
 import errorHandler from "./src/middlewares/errorHandler.js";
+import serverless from "serverless-http";
 
 const app = express();
 const port = 3000;
+const serverless = require("serverless-http");
 
 // CORS configuration
 app.use(
@@ -86,4 +88,4 @@ app.listen(port, () => {
   console.log(`--------------------------------------------------\n`);
 });
 
-export default app;
+export const handler = serverless(app);
